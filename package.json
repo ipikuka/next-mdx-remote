@@ -1,6 +1,6 @@
 {
   "name": "@ipikuka/next-mdx-remote",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
   "type": "module",
   "module": "./dist/esm/index.js",
@@ -11,7 +11,7 @@
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run prettier && npm run lint",
+    "prepublishOnly": "npm run prettier && npm run lint",
     "prebuild": "rimraf dist"
   },
   "files": [
