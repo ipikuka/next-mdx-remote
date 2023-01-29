@@ -7,7 +7,7 @@ import remarkGemoji from "remark-gemoji";
 import remarkEmoji from "remark-emoji";
 import remarkTextr from "remark-textr";
 import remarkSuperSub from "remark-supersub";
-import remarkBreaks from "remark-breaks";
+// import remarkBreaks from "remark-breaks";
 import smartypants from "remark-smartypants";
 import remarkCodeTitles from "remark-flexible-code-titles";
 import remarkFixGuillemets from "remark-fix-guillemets";
@@ -42,8 +42,9 @@ import { type IHeading } from "types";
 const getMarkdownSource = async (
   rawfile: string,
 ): Promise<MDXRemoteSerializeResult> => {
-  let toc: IHeading[] = [];
+  const toc: IHeading[] = [];
 
+  // eslint-disable-next line @typescript-eslint/no-unused-vars
   async function markdownToMarkdown(rawf: string) {
     const file = await unified()
       .use(remarkParse)
@@ -66,7 +67,7 @@ const getMarkdownSource = async (
   }
 
   const pipe =
-    <T,>(...fns: ((param: T) => T)[]) =>
+    <T>(...fns: ((param: T) => T)[]) =>
     (x: T) =>
       fns.reduce((v, f) => f(v), x);
 
