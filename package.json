@@ -1,6 +1,6 @@
 {
   "name": "@ipikuka/next-mdx-remote",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
   "type": "module",
   "module": "./dist/esm/index.js",
@@ -36,6 +36,9 @@
   "homepage": "https://github.com/ipikuka/next-mdx-remote#readme",
   "bugs": {
     "url": "https://github.com/ipikuka/next-mdx-remote/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "github-slugger": "^2.0.0",
