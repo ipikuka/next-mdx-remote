@@ -25,7 +25,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
 
-import { toTitleCase } from "util/index";
+import { toTitleCase } from "./util";
 
 import {
   rare,
@@ -33,13 +33,13 @@ import {
   guillemets,
   breakline,
   horizontalline,
-} from "lib/remark-textr-plugins";
-import remarkFixBreaks from "lib/remark-fix-breaks";
-import rehypePreLanguage from "lib/rehype-pre-language";
-import remarkTocHeadings from "lib/remark-toc-headings";
-import { type IHeading } from "types";
+} from "./lib/remark-textr-plugins";
+import remarkFixBreaks from "./lib/remark-fix-breaks";
+import rehypePreLanguage from "./lib/rehype-pre-language";
+import remarkTocHeadings from "./lib/remark-toc-headings";
+import { type IHeading } from "./types";
 
-const getMarkdownSource = async (
+const serializeWrapper = async (
   rawfile: string,
 ): Promise<MDXRemoteSerializeResult> => {
   const toc: IHeading[] = [];
@@ -166,4 +166,4 @@ const getMarkdownSource = async (
   });
 };
 
-export default getMarkdownSource;
+export default serializeWrapper;
