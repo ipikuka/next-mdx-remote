@@ -103,14 +103,6 @@ const serializeWrapper = async (
             singleTilde: false,
           },
         ],
-        remarkGemoji,
-        [
-          remarkEmoji,
-          {
-            padSpaceAfter: false,
-            emoticon: true,
-          },
-        ],
         [
           remarkTextr,
           {
@@ -137,6 +129,14 @@ const serializeWrapper = async (
               };
             },
           } as CustomContainerOptions,
+        ],
+        remarkGemoji,
+        [
+          remarkEmoji,
+          {
+            padSpaceAfter: false,
+            emoticon: true,
+          },
         ],
       ],
       rehypePlugins: [
