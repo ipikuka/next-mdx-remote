@@ -2,11 +2,10 @@
   "include": ["src/**/*", "global.d.ts"],
   "exclude": ["src/lib_archive"],
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "target": "ES2020",
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "esModuleInterop": true,
     "skipLibCheck": true,
     "jsx": "react",
     "strict": true,

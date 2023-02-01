@@ -11,7 +11,7 @@ import remarkSuperSub from "remark-supersub";
 import smartypants from "remark-smartypants";
 import remarkCodeTitles from "remark-flexible-code-titles";
 import remarkFixGuillemets from "remark-fix-guillemets";
-import remarkContainer, {
+import remarkCustomContainer, {
   type CustomContainerOptions,
 } from "remark-custom-container";
 import {
@@ -24,6 +24,7 @@ import rehypePrismPlus from "rehype-prism-plus";
 import { serialize } from "next-mdx-remote/serialize";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
+import { type VFileCompatible } from "vfile";
 
 import { toTitleCase } from "./util";
 
@@ -40,7 +41,7 @@ import remarkTocHeadings from "./lib/remark-toc-headings";
 import { type IHeading } from "./types";
 
 const serializeWrapper = async (
-  rawfile: string,
+  rawfile: VFileCompatible,
 ): Promise<MDXRemoteSerializeResult> => {
   const toc: IHeading[] = [];
 
@@ -76,7 +77,7 @@ const serializeWrapper = async (
   }
 
   // const processedRawFile = await markdownToMarkdown(rawfile);
-  const processedRawFile = await fileToFile(rawfile);
+  const processedRawFile = await fileToFile(String(rawfile));
 
   return await serialize(processedRawFile, {
     parseFrontmatter: true,
@@ -121,11 +122,11 @@ const serializeWrapper = async (
         remarkSuperSub,
         remarkCodeTitles, // adds <div class=""remark-code-title> above code
         [
-          remarkContainer,
+          remarkCustomContainer,
           {
             containerTag: "admonition", // default is "div"
             titleElement: null,
-            additionalProperties(className, title) {
+            additionalProperties: (className, title) => {
               return {
                 ["data-type"]: className?.toLowerCase(),
                 ["data-title"]: title
