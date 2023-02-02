@@ -10,8 +10,9 @@
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs",
+    "test:file": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs serialize.plugin.test.tsx",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run prettier && npm run lint",
+    "prepublishOnly": "npm run test && npm run prettier && npm run lint",
     "prebuild": "rimraf dist"
   },
   "files": [
@@ -71,6 +72,7 @@
     "unist-util-visit": "^4.1.2"
   },
   "devDependencies": {
+    "@hashicorp/remark-plugins": "^4.1.1",
     "@types/dedent": "^0.7.0",
     "@types/hast": "^2.3.4",
     "@types/jest": "^29.4.0",

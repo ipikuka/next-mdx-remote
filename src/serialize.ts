@@ -18,6 +18,7 @@ import {
   remarkDefinitionList,
   defListHastHandlers,
 } from "remark-definition-list";
+import { paragraphCustomAlerts } from "@hashicorp/remark-plugins";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
@@ -39,27 +40,25 @@ import remarkFixBreaks from "./lib/remark-fix-breaks";
 import rehypePreLanguage from "./lib/rehype-pre-language";
 import remarkTocHeadings from "./lib/remark-toc-headings";
 import { type IHeading } from "./types";
+import { type Root } from "mdast";
 
 const serializeWrapper = async (
   rawfile: VFileCompatible,
 ): Promise<MDXRemoteSerializeResult> => {
   const toc: IHeading[] = [];
 
-  // eslint-disable-next line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function markdownToMarkdown(rawf: string) {
     const file = await unified()
       .use(remarkParse)
       .use(remarkStringify)
-      .use(() => (tree) => {
-        console.dir(tree);
-      })
       .use(remarkFrontmatter, ["yaml", "toml"])
       .use(remarkFixGuillemets)
       .use(remarkTextr, {
         plugins: [guillemets],
       })
       .use(remarkFixBreaks)
-      .use(() => (tree) => {
+      .use(() => (tree: Root) => {
         console.dir(tree);
       })
       .process(rawf);
@@ -112,7 +111,6 @@ const serializeWrapper = async (
         // remarkBreaks, // each "enter" becomes <br>
         remarkDefinitionList,
         remarkSuperSub,
-        remarkCodeTitles, // adds <div class=""remark-code-title> above code
         [
           remarkCustomContainer,
           {
@@ -130,6 +128,7 @@ const serializeWrapper = async (
             },
           } as CustomContainerOptions,
         ],
+        paragraphCustomAlerts,
         remarkGemoji,
         [
           remarkEmoji,
@@ -138,6 +137,7 @@ const serializeWrapper = async (
             emoticon: true,
           },
         ],
+        remarkCodeTitles,
       ],
       rehypePlugins: [
         rehypePreLanguage, // to add "data-language" property to pre elements.
