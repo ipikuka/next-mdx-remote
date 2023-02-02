@@ -146,6 +146,17 @@ function guillemets(input: string): string {
     .replace(rightAnglePattern, spaceChar.concat(rightMark));
 }
 
-export { scoped, rare, breakline, horizontalline, ellipses, copyright, companymark, trademark, gender, guillemets };
+export {
+  scoped,
+  rare,
+  breakline,
+  horizontalline,
+  ellipses,
+  copyright,
+  companymark,
+  trademark,
+  gender,
+  guillemets,
+};
 
 /* eslint-enable require-unicode-regexp */
