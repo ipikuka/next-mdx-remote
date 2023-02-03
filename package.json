@@ -44,6 +44,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@hashicorp/remark-plugins": "^4.1.1",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "hast-util-has-property": "^2.0.1",
@@ -72,7 +73,6 @@
     "unist-util-visit": "^4.1.2"
   },
   "devDependencies": {
-    "@hashicorp/remark-plugins": "^4.1.1",
     "@types/dedent": "^0.7.0",
     "@types/hast": "^2.3.4",
     "@types/jest": "^29.4.0",

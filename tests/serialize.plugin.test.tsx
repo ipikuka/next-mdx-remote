@@ -1,13 +1,6 @@
-import * as React from "react";
-import ReactDOMServer from "react-dom/server";
-import { MDXRemote } from "next-mdx-remote";
-import * as MDX from "@mdx-js/react";
-import { VFile } from "vfile";
 import dedent from "dedent";
 
 import { renderStatic } from "./utils";
-
-import serialize from "../src";
 
 /**
  *
