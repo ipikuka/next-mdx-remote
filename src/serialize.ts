@@ -11,9 +11,9 @@ import remarkSuperSub from "remark-supersub";
 import smartypants from "remark-smartypants";
 import remarkCodeTitles from "remark-flexible-code-titles";
 import remarkFixGuillemets from "remark-fix-guillemets";
-import remarkFlexibleContainers, {
-  type FlexibleContainerOptions,
-} from "remark-flexible-containers";
+// import remarkFlexibleContainers, {
+//   type FlexibleContainerOptions,
+// } from "remark-flexible-containers";
 import {
   remarkDefinitionList,
   defListHastHandlers,
@@ -111,19 +111,19 @@ const serializeWrapper = async (
         // remarkBreaks, // each "enter" becomes <br>
         remarkDefinitionList,
         remarkSuperSub,
-        [
-          remarkFlexibleContainers,
-          {
-            title: null,
-            containerTagName: "admonition",
-            containerProperties: (type, title) => {
-              return {
-                ["data-type"]: type?.toLowerCase(),
-                ["data-title"]: toTitleCase(title),
-              };
-            },
-          } as FlexibleContainerOptions,
-        ],
+        // [
+        //   remarkFlexibleContainers,
+        //   {
+        //     title: null,
+        //     containerTagName: "admonition",
+        //     containerProperties: (type, title) => {
+        //       return {
+        //         ["data-type"]: type?.toLowerCase(),
+        //         ["data-title"]: toTitleCase(title),
+        //       };
+        //     },
+        //   } as FlexibleContainerOptions,
+        // ],
         paragraphCustomAlerts,
         remarkGemoji,
         [
