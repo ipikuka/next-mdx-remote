@@ -153,7 +153,7 @@ describe("serialize", () => {
     const result = await renderStatic(input);
 
     expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container danger" data-type="danger" data-title="Danger"><p>content</p></admonition>"`,
+      `"<admonition class="remark-container danger" data-type="danger"><p>content</p></admonition>"`,
     );
   });
 });

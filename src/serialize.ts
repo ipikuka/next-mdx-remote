@@ -11,9 +11,9 @@ import remarkSuperSub from "remark-supersub";
 import smartypants from "remark-smartypants";
 import remarkCodeTitles from "remark-flexible-code-titles";
 import remarkFixGuillemets from "remark-fix-guillemets";
-import remarkCustomContainer, {
-  type CustomContainerOptions,
-} from "remark-custom-container";
+import remarkFlexibleContainers, {
+  type FlexibleContainerOptions,
+} from "remark-flexible-containers";
 import {
   remarkDefinitionList,
   defListHastHandlers,
@@ -112,21 +112,17 @@ const serializeWrapper = async (
         remarkDefinitionList,
         remarkSuperSub,
         [
-          remarkCustomContainer,
+          remarkFlexibleContainers,
           {
-            containerTag: "admonition", // default is "div"
-            titleElement: null,
-            additionalProperties: (className, title) => {
+            title: null,
+            containerTagName: "admonition",
+            containerProperties: (type, title) => {
               return {
-                ["data-type"]: className?.toLowerCase(),
-                ["data-title"]: title
-                  ? toTitleCase(title)
-                  : className
-                  ? toTitleCase(className)
-                  : undefined,
+                ["data-type"]: type?.toLowerCase(),
+                ["data-title"]: toTitleCase(title),
               };
             },
-          } as CustomContainerOptions,
+          } as FlexibleContainerOptions,
         ],
         paragraphCustomAlerts,
         remarkGemoji,
