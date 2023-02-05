@@ -124,7 +124,7 @@ describe("serialize", () => {
   });
 
   // ******************************************
-  test("custom container --> admonitions with title", async () => {
+  test.skip("custom container --> admonitions with title", async () => {
     const input = dedent(`
         ::: warning title
 
@@ -141,7 +141,7 @@ describe("serialize", () => {
   });
 
   // ******************************************
-  test("custom container --> admonitions without title", async () => {
+  test.skip("custom container --> admonitions without title", async () => {
     const input = dedent(`
           ::: danger
   

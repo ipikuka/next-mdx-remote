@@ -27,7 +27,7 @@ import type { MDXRemoteSerializeResult } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
 import { type VFileCompatible } from "vfile";
 
-import { toTitleCase } from "./util";
+// import { toTitleCase } from "./util";
 
 import {
   rare,
