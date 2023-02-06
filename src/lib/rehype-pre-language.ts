@@ -20,7 +20,11 @@ const plugin: Plugin<void[], Root> = () => (tree) => {
       );
 
       if (filtered.length) {
-        const language = filtered[0].slice(9);
+        let language = filtered[0].slice(9);
+
+        if (language.startsWith("diff-")) {
+          language = language.slice(5);
+        }
 
         if (parent.properties) {
           parent.properties["data-language"] = language;
