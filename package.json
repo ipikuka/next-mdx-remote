@@ -1,10 +1,9 @@
 {
   "name": "@ipikuka/next-mdx-remote",
-  "version": "0.0.13",
+  "version": "1.0.0-alpha.0",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
   "type": "module",
   "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "tsc",
     "lint": "eslint \"{**/*,*}.{js,ts}\"",
