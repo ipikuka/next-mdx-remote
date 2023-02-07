@@ -4,9 +4,15 @@ import { visit } from "unist-util-visit";
 import { slug } from "github-slugger";
 import { toString } from "mdast-util-to-string";
 
-import { type IHeading } from "../types";
+type HeadingTocItem = {
+  value: string;
+  url: string;
+  depth: number;
+  parent?: string;
+  level?: number[];
+};
 
-const plugin: Plugin<[{ exportRef: IHeading[] }], Root> = (options) => {
+const plugin: Plugin<[{ exportRef: HeadingTocItem[] }], Root> = (options) => {
   return (tree) =>
     visit(tree, "heading", (node, index, parent) => {
       const textContent = toString(node);

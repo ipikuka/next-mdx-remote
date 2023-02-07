@@ -26,8 +26,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
 import { type VFileCompatible } from "vfile";
-
-import { toTitleCase } from "./util";
+import { type Root } from "mdast";
 
 import {
   rare,
@@ -39,13 +38,35 @@ import {
 import remarkFixBreaks from "./lib/remark-fix-breaks";
 import rehypePreLanguage from "./lib/rehype-pre-language";
 import remarkTocHeadings from "./lib/remark-toc-headings";
-import { type IHeading } from "./types";
-import { type Root } from "mdast";
 
+type HeadingTocItem = {
+  value: string;
+  url: string;
+  depth: number;
+  parent?: string;
+  level?: number[];
+};
+
+/**
+ * Returns the Title Case of a given string
+ * https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+ */
+function toTitleCase(str: string | undefined) {
+  if (!str) return;
+
+  return str.replace(/\b\w+('\w{1})?/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+  });
+}
+
+/**
+ * Opinionated serialize wrapper
+ *
+ */
 const serializeWrapper = async (
   rawfile: VFileCompatible,
 ): Promise<MDXRemoteSerializeResult> => {
-  const toc: IHeading[] = [];
+  const toc: HeadingTocItem[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function markdownToMarkdown(rawf: string) {
