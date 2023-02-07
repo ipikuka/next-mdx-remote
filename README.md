@@ -16,11 +16,11 @@ The `@ipikuka/next-mdx-remote` provides you a `serialize` function. The `seriali
 The remark plugins that the `@ipikuka/next-mdx-remote` uses are:
 
 - remark-breaks (disabled for now)
-- remark-custom-container
 - remark-definition-list
 - remark-emoji
 - remark-fix-guillemets
 - remark-flexible-code-titles
+- remark-flexible-containers
 - remark-gemoji
 - remark-gfm
 - remark-smartypants
