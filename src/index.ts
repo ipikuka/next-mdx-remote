@@ -1,3 +1,3 @@
-import serialize from "./serialize";
+import serialize from "./serialize.js";
 
 export default serialize;

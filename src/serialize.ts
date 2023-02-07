@@ -34,10 +34,10 @@ import {
   guillemets,
   breakline,
   horizontalline,
-} from "./lib/remark-textr-plugins";
-import remarkFixBreaks from "./lib/remark-fix-breaks";
-import rehypePreLanguage from "./lib/rehype-pre-language";
-import remarkTocHeadings from "./lib/remark-toc-headings";
+} from "./lib/remark-textr-plugins.js";
+import remarkFixBreaks from "./lib/remark-fix-breaks.js";
+import rehypePreLanguage from "./lib/rehype-pre-language.js";
+import remarkTocHeadings from "./lib/remark-toc-headings.js";
 
 type HeadingTocItem = {
   value: string;
