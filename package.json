@@ -1,6 +1,6 @@
 {
   "name": "@ipikuka/next-mdx-remote",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
   "type": "module",
   "exports": {
