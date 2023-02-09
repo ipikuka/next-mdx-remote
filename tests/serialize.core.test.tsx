@@ -149,7 +149,9 @@ describe("serialize", () => {
       # Hello
     `);
 
-    const result = await serialize(input);
+    const result = await serialize(input, {
+      parseFrontmatter: true,
+    });
 
     expect(result.frontmatter?.hello).toEqual("world");
   });
@@ -165,7 +167,9 @@ describe("serialize", () => {
       # Tags
     `);
 
-    const result = await serialize(input);
+    const result = await serialize(input, {
+      parseFrontmatter: true,
+    });
 
     expect(result.frontmatter?.tags).toEqual(["javascript", "html"]);
   });
@@ -179,7 +183,9 @@ describe("serialize", () => {
       # Hello {frontmatter.hello}
     `);
 
-    const result = await renderStatic(input);
+    const result = await serialize(input, {
+      parseFrontmatter: true,
+    });
 
     expect(result).toMatchInlineSnapshot(
       `"<h1 id="hello-world"><a class="anchor-copylink" href="#hello-world"><icon class="copylink"></icon></a>Hello world</h1>"`,

@@ -3,19 +3,21 @@ import ReactDOMServer from "react-dom/server";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote";
 import { type VFileCompatible } from "vfile";
 
-import serialize from "../src";
+import serialize, { type OpinionatedSerializeOptions } from "../src";
 
 export async function renderStatic(
-  mdx: VFileCompatible,
+  source: VFileCompatible,
   {
     components,
     scope,
-  }: {
-    components?: MDXRemoteProps["components"];
-    scope?: Record<string, unknown>;
-  } = {},
+    mdxOptions,
+    parseFrontmatter,
+  }: OpinionatedSerializeOptions & Pick<MDXRemoteProps, "components"> = {},
 ): Promise<string> {
-  const mdxSource = await serialize(mdx);
+  const mdxSource = await serialize(source, {
+    mdxOptions,
+    parseFrontmatter,
+  });
 
   return ReactDOMServer.renderToStaticMarkup(
     <MDXRemote {...mdxSource} components={components} scope={scope} />,

@@ -11,9 +11,9 @@ This package is an opinionated wrapper (only `serialize` function) for the [next
 
 ## When should I use this?
 
-The `@ipikuka/next-mdx-remote` provides you a `serialize` function. The `serialize` function is an opinionated wrapper of the `serialize` function of the `next-mdx-remote` (by hashicorp).
+The `@ipikuka/next-mdx-remote` provides a `serialize` function. The `serialize` function is an opinionated wrapper of the `serialize` function of the `next-mdx-remote` which is a set of light utilities allowing MDX to be loaded within `getStaticProps` or `gerServerSideProps` and hydrated correctly on the client.
 
-The remark plugins that the `@ipikuka/next-mdx-remote` uses are:
+The remark plugins used in the `@ipikuka/next-mdx-remote` are:
 
 - remark-breaks (disabled for now)
 - remark-definition-list
@@ -94,7 +94,44 @@ export async function getStaticProps() {
 
 ## Options
 
-The `@ipikuka/next-mdx-remote` is opinionated as I said, so it is **not** going to be planned to provide an option.
+The `@ipikuka/next-mdx-remote` **serialize** function accepts the `OpinionatedSerializeOptions` which is similar `SerializeOptions` of the `next-mdx-remote`, _but a little bit opinionated_.
+
+All options are _optional_.
+
+```typescript
+export type OpinionatedSerializeOptions = {
+  scope?: Record<string, unknown>;
+  parseFrontmatter?: boolean;
+  mdxOptions?: {
+    format?: "mdx" | "md" | "detect";
+    jsx?: boolean;
+    mdExtensions?: string[];
+    mdxExtensions?: string[];
+    useDynamicImport?: boolean;
+    baseUrl?: string;
+  };
+};
+```
+
+Some `mdxOptions` are omitted from the official `mdxOptions` (See https://github.com/hashicorp/next-mdx-remote#apis). This is why the `@ipikuka/next-mdx-remote` is opinionated, providing some pre-selected plugins. The omitted options are:
+
+```typescript
+{
+  recmaPlugins?: PluggableList | undefined;
+  remarkPlugins?: PluggableList | undefined;
+  rehypePlugins?: PluggableList | undefined;
+  remarkRehypeOptions?: Options | undefined;
+  pragma?: string | undefined;
+  pragmaFrag?: string | undefined;
+  pragmaImportSource?: string | undefined;
+  jsxImportSource?: string | undefined;
+  jsxRuntime?: "automatic" | "classic" | undefined;
+  SourceMapGenerator?: typeof SourceMapGenerator | undefined;
+  development?: boolean | undefined;
+}
+```
+
+If you think that an omitted option is needed, you are wellcome to open an issue.
 
 ## Examples:
 
@@ -102,7 +139,7 @@ Need a playground with single page web application. (a PR is wellcome :))
 
 ## Types
 
-This package is fully typed with [TypeScript][typeScript]. The `serialize` function of the `@ipikuka/next-mdx-remote` returns `Promise<MDXRemoteSerializeResult>` as the official `next-mdx-remote` do.
+This package is fully typed with [TypeScript][typeScript]. The `serialize` function of the `@ipikuka/next-mdx-remote` accepts `OpinionatedSerializeOptions` and returns `Promise<MDXRemoteSerializeResult>` as the official `next-mdx-remote` does.
 
 ## Compatibility
 

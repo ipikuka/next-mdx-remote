@@ -23,7 +23,10 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
 import { serialize } from "next-mdx-remote/serialize";
-import type { MDXRemoteSerializeResult } from "next-mdx-remote/dist/types";
+import type {
+  MDXRemoteSerializeResult,
+  SerializeOptions,
+} from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
 import { type VFileCompatible } from "vfile";
 import { type Root } from "mdast";
@@ -60,11 +63,61 @@ function toTitleCase(str: string | undefined) {
 }
 
 /**
+ * Constructs a pipe function
+ */
+const pipe =
+  <T>(...fns: ((param: T) => T)[]) =>
+  (x: T) =>
+    fns.reduce((v, f) => f(v), x);
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+
+type OpinionatedMdxOptions = Pick<
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  SerializeOptions["mdxOptions"] & {},
+  | "format"
+  | "mdExtensions"
+  | "mdxExtensions"
+  | "jsx"
+  | "useDynamicImport"
+  | "baseUrl"
+>;
+
+// excluded mdxOptions --> {
+//   recmaPlugins?: PluggableList | undefined;
+//   remarkPlugins?: PluggableList | undefined;
+//   rehypePlugins?: PluggableList | undefined;
+//   remarkRehypeOptions?: Options | undefined;
+//   pragma?: string | undefined;
+//   pragmaFrag?: string | undefined;
+//   pragmaImportSource?: string | undefined;
+//   jsxImportSource?: string | undefined;
+//   jsxRuntime?: "automatic" | "classic" | undefined;
+//   SourceMapGenerator?: typeof SourceMapGenerator | undefined;
+//   development?: boolean | undefined;
+// }
+
+export type OpinionatedSerializeOptions = Prettify<
+  Pick<SerializeOptions, "scope" | "parseFrontmatter"> & {
+    mdxOptions?: Prettify<OpinionatedMdxOptions>;
+  }
+>;
+
+export { type MDXRemoteSerializeResult };
+
+/**
  * Opinionated serialize wrapper
  *
  */
 const serializeWrapper = async (
-  rawfile: VFileCompatible,
+  source: VFileCompatible,
+  {
+    scope = {},
+    mdxOptions = {},
+    parseFrontmatter = false,
+  }: OpinionatedSerializeOptions = {},
+  rsc = false,
 ): Promise<MDXRemoteSerializeResult> => {
   const toc: HeadingTocItem[] = [];
 
@@ -87,101 +140,99 @@ const serializeWrapper = async (
     return file;
   }
 
-  const pipe =
-    <T>(...fns: ((param: T) => T)[]) =>
-    (x: T) =>
-      fns.reduce((v, f) => f(v), x);
-
-  async function fileToFile(rawf: string) {
-    return pipe<string>(breakline, horizontalline, guillemets)(rawf);
+  async function fileToFile(rawfile: string) {
+    return pipe<string>(breakline, horizontalline, guillemets)(rawfile);
   }
 
-  // const processedRawFile = await markdownToMarkdown(rawfile);
-  const processedRawFile = await fileToFile(String(rawfile));
+  // const processedSource = await markdownToMarkdown(source);
+  const processedSource = await fileToFile(String(source));
 
-  return await serialize(processedRawFile, {
-    parseFrontmatter: true,
-    scope: { toc },
-    mdxOptions: {
-      format: "mdx",
-      remarkPlugins: [
-        [
-          smartypants,
-          {
-            dashes: "oldschool",
-          },
-        ],
-        [
-          remarkTocHeadings,
-          {
-            exportRef: toc,
-          },
-        ],
-        [
-          remarkGfm, // Github Flavored Markup
-          {
-            singleTilde: false,
-          },
-        ],
-        [
-          remarkTextr,
-          {
-            plugins: [scoped, rare],
-          },
-        ],
-        // remarkBreaks, // each "enter" becomes <br>
-        remarkDefinitionList,
-        remarkSuperSub,
-        [
-          remarkFlexibleContainers,
-          {
-            title: null,
-            containerTagName: "admonition",
-            containerProperties: (type, title) => {
-              return {
-                ["data-type"]: type?.toLowerCase(),
-                ["data-title"]: toTitleCase(title),
-              };
+  return await serialize(
+    processedSource,
+    {
+      parseFrontmatter,
+      scope: { toc, ...scope },
+      mdxOptions: {
+        ...mdxOptions,
+        remarkPlugins: [
+          [
+            smartypants,
+            {
+              dashes: "oldschool",
             },
-          } as FlexibleContainerOptions,
+          ],
+          [
+            remarkTocHeadings,
+            {
+              exportRef: toc,
+            },
+          ],
+          [
+            remarkGfm, // Github Flavored Markup
+            {
+              singleTilde: false,
+            },
+          ],
+          [
+            remarkTextr,
+            {
+              plugins: [scoped, rare],
+            },
+          ],
+          // remarkBreaks, // each "enter" becomes <br>
+          remarkDefinitionList,
+          remarkSuperSub,
+          [
+            remarkFlexibleContainers,
+            {
+              title: null,
+              containerTagName: "admonition",
+              containerProperties: (type, title) => {
+                return {
+                  ["data-type"]: type?.toLowerCase(),
+                  ["data-title"]: toTitleCase(title),
+                };
+              },
+            } as FlexibleContainerOptions,
+          ],
+          paragraphCustomAlerts,
+          remarkGemoji,
+          [
+            remarkEmoji,
+            {
+              padSpaceAfter: false,
+              emoticon: true,
+            },
+          ],
+          remarkCodeTitles,
         ],
-        paragraphCustomAlerts,
-        remarkGemoji,
-        [
-          remarkEmoji,
-          {
-            padSpaceAfter: false,
-            emoticon: true,
+        rehypePlugins: [
+          rehypePreLanguage, // to add "data-language" property to pre elements.
+          rehypeSlug, // to add ids to headings.
+          [
+            rehypeAutolinkHeadings,
+            {
+              behavior: "prepend",
+              properties: { className: "anchor-copylink" },
+              content: () => [h("icon.copylink")],
+            } as Options,
+          ], // to add links to headings with ids back to themselves.
+          [
+            rehypePrismPlus,
+            {
+              ignoreMissing: true,
+            },
+          ],
+        ],
+        remarkRehypeOptions: {
+          handlers: {
+            ...defListHastHandlers,
           },
-        ],
-        remarkCodeTitles,
-      ],
-      rehypePlugins: [
-        rehypePreLanguage, // to add "data-language" property to pre elements.
-        rehypeSlug, // to add ids to headings.
-        [
-          rehypeAutolinkHeadings,
-          {
-            behavior: "prepend",
-            properties: { className: "anchor-copylink" },
-            content: () => [h("icon.copylink")],
-          } as Options,
-        ], // to add links to headings with ids back to themselves.
-        [
-          rehypePrismPlus,
-          {
-            ignoreMissing: true,
-          },
-        ],
-      ],
-      remarkRehypeOptions: {
-        handlers: {
-          // any other handlers
-          ...defListHastHandlers,
         },
       },
     },
-  });
+    rsc,
+  );
 };
 
 export default serializeWrapper;
