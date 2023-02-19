@@ -2,8 +2,8 @@
   "include": ["src/**/*", "global.d.ts"],
   "exclude": ["src/lib_archive"],
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "node",
     "skipLibCheck": true,

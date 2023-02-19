@@ -3,18 +3,13 @@
   "version": "1.0.0-alpha.10",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js"
-    }
-  },
-  "module": "./dist/esm/index.js",
+  "exports": "./dist/esm/index.js",
+  "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint \"{**/*,*}.{js,ts}\"",
-    "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts}\"",
+    "lint": "eslint .",
+    "prettier": "prettier --write .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs",
     "test:file": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs serialize.plugin.test.tsx",
     "prepare": "npm run build",
