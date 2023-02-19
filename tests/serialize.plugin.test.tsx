@@ -48,8 +48,8 @@ describe("serialize", () => {
   // ******************************************
   test("quotes", async () => {
     const input = dedent(`
-            "double quotes" and 'single quotes' and <<russian>>  
-          `);
+      "double quotes" and 'single quotes' and <<russian>>  
+    `);
 
     const result = await renderStatic(input);
 
@@ -61,9 +61,9 @@ describe("serialize", () => {
   // ******************************************
   test("Smartypants", async () => {
     const input = dedent(`
-            dash (-) en dash (--), em dash (---)  
-            types - -- ---  
-          `);
+      dash (-) en dash (--), em dash (---)  
+      types - -- ---  
+    `);
 
     const result = await renderStatic(input);
 
@@ -90,11 +90,36 @@ describe("serialize", () => {
   });
 
   // ******************************************
+  test("flexible paragraphs", async () => {
+    const input = dedent(`
+      ~> hello
+      ~|> hello
+      ~:> hello
+      ~:|> hello
+      ~|:> hello
+      ~:|:> hello
+      ~::> hello
+    `);
+
+    const result = await renderStatic(input);
+
+    expect(result).toMatchInlineSnapshot(`
+      "<p class="flexible-paragraph">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-center" style="text-align:center">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-right" style="text-align:right">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p>
+      <p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p>"
+    `);
+  });
+
+  // ******************************************
   test("flexible code titles", async () => {
     const input = dedent(`
-          \`\`\`js:title.js
-          \`\`\`
-        `);
+      \`\`\`js:title.js
+      \`\`\`
+    `);
 
     const result = await renderStatic(input);
 
@@ -106,9 +131,9 @@ describe("serialize", () => {
   // ******************************************
   test("flexible code titles", async () => {
     const input = dedent(`
-            \`\`\`js:C:\\users\\documents
-            \`\`\`
-          `);
+      \`\`\`js:C:\\users\\documents
+      \`\`\`
+    `);
 
     const result = await renderStatic(input);
 
@@ -120,12 +145,10 @@ describe("serialize", () => {
   // ******************************************
   test("custom container --> admonitions with title", async () => {
     const input = dedent(`
-        ::: warning title
-
-        content
-
-        :::
-      `);
+      ::: warning title
+      content
+      :::
+    `);
 
     const result = await renderStatic(input);
 
@@ -137,12 +160,10 @@ describe("serialize", () => {
   // ******************************************
   test("custom container --> admonitions without title", async () => {
     const input = dedent(`
-          ::: danger
-  
-          content
-  
-          :::
-        `);
+      ::: danger
+      content
+      :::
+    `);
 
     const result = await renderStatic(input);
 
