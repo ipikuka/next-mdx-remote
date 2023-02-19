@@ -35,10 +35,10 @@ describe("serialize", () => {
   });
 
   // ******************************************
-  test("paragraph custom alerts", async () => {
+  test("flexible paragraphs", async () => {
     const result = await renderStatic("~> hello");
     expect(result).toMatchInlineSnapshot(
-      `"<div class="alert alert-warning g-type-body"><p>hello</p></div>"`,
+      `"<p class="flexible-paragraph">hello</p>"`,
     );
   });
 

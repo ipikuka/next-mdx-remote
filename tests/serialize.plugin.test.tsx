@@ -74,24 +74,18 @@ describe("serialize", () => {
   });
 
   // ******************************************
-  test("paragraph custom alerts", async () => {
+  test("flexible paragraphs", async () => {
     const input = dedent(`
-      => hello success
-
-      -> hello info
-
-      ~> hello warning
-
-      !> hello danger
+      ~:w:> hello warning
+      
+      =:s> hello success
     `);
 
     const result = await renderStatic(input);
 
     expect(result).toMatchInlineSnapshot(`
-      "<div class="alert alert-success g-type-body"><p>hello success</p></div>
-      <div class="alert alert-info g-type-body"><p>hello info</p></div>
-      <div class="alert alert-warning g-type-body"><p>hello warning</p></div>
-      <div class="alert alert-danger g-type-body"><p>hello danger</p></div>"
+      "<p class="flexible-paragraph flexiparaph-warning flexiparaph-align-justify" style="text-align:justify">hello warning</p>
+      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-success flexiparaph-align-left" style="text-align:left">hello success</p></div>"
     `);
   });
 

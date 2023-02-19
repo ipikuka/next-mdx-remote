@@ -51,7 +51,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@hashicorp/remark-plugins": "^4.1.1",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "hast-util-has-property": "^2.0.1",
@@ -68,7 +67,8 @@
     "remark-emoji": "^3.1.0",
     "remark-fix-guillemets": "^1.1.2",
     "remark-flexible-code-titles": "^1.1.1",
-    "remark-flexible-containers": "^1.0.0",
+    "remark-flexible-containers": "^1.0.2",
+    "remark-flexible-paragraphs": "^1.0.0",
     "remark-frontmatter": "^4.0.1",
     "remark-gemoji": "^7.0.1",
     "remark-gfm": "^3.0.1",

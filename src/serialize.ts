@@ -18,7 +18,7 @@ import {
   remarkDefinitionList,
   defListHastHandlers,
 } from "remark-definition-list";
-import { paragraphCustomAlerts } from "@hashicorp/remark-plugins";
+import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
@@ -195,7 +195,7 @@ const serializeWrapper = async (
               },
             } as FlexibleContainerOptions,
           ],
-          paragraphCustomAlerts,
+          remarkFlexibleParagraphs,
           remarkGemoji,
           [
             remarkEmoji,
