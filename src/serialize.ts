@@ -7,7 +7,6 @@ import remarkGemoji from "remark-gemoji";
 import remarkEmoji from "remark-emoji";
 import remarkTextr from "remark-textr";
 import remarkSuperSub from "remark-supersub";
-// import remarkBreaks from "remark-breaks";
 import smartypants from "remark-smartypants";
 import remarkCodeTitles from "remark-flexible-code-titles";
 import remarkFixGuillemets from "remark-fix-guillemets";
