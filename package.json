@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "prettier": "prettier --write .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs",
-    "test:file": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs serialize.plugin.test.tsx",
+    "test:file": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs plugins.test.tsx",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test && npm run prettier && npm run lint",
     "prebuild": "rimraf dist"
@@ -54,6 +54,7 @@
     "next-mdx-remote": ">=4.x",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-prism-plus": "^1.5.1",
+    "rehype-raw": "^6.1.1",
     "rehype-slug": "^5.1.0",
     "remark-definition-list": "^1.2.0",
     "remark-emoji": "^3.1.0",
@@ -61,14 +62,12 @@
     "remark-flexible-code-titles": "^1.1.1",
     "remark-flexible-containers": "^1.0.2",
     "remark-flexible-paragraphs": "^1.0.0",
-    "remark-frontmatter": "^4.0.1",
     "remark-gemoji": "^7.0.1",
     "remark-gfm": "^3.0.1",
-    "remark-parse": "^10.0.1",
     "remark-smartypants": "^2.0.0",
-    "remark-stringify": "^10.0.2",
     "remark-supersub": "^1.0.0",
     "remark-textr": "^5.0.1",
+    "unist-builder": "^3.0.1",
     "unist-util-visit": "^4.1.2"
   },
   "devDependencies": {

@@ -1,7 +1,3 @@
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkStringify from "remark-stringify";
-import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkGemoji from "remark-gemoji";
 import remarkEmoji from "remark-emoji";
@@ -21,6 +17,7 @@ import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
+import rehypeRaw from "rehype-raw";
 import { serialize } from "next-mdx-remote/serialize";
 import type {
   MDXRemoteSerializeResult,
@@ -28,7 +25,6 @@ import type {
 } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
 import { type VFileCompatible } from "vfile";
-import { type Root } from "mdast";
 
 import {
   rare,
@@ -37,7 +33,6 @@ import {
   breakline,
   horizontalline,
 } from "./lib/remark-textr-plugins.js";
-import remarkFixBreaks from "./lib/remark-fix-breaks.js";
 import rehypePreLanguage from "./lib/rehype-pre-language.js";
 import remarkTocHeadings from "./lib/remark-toc-headings.js";
 
@@ -106,6 +101,26 @@ export type OpinionatedSerializeOptions = Prettify<
 export { type MDXRemoteSerializeResult };
 
 /**
+ *
+ * to console.log the tree as a plugin
+ *
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const pluginLogTree = () => (tree: object) => {
+  console.log(
+    JSON.stringify(
+      tree,
+      function replacer(key, value) {
+        if (key === "position") return undefined;
+        else return value;
+      },
+      2,
+    ),
+  );
+};
+
+/**
+ *
  * Opinionated serialize wrapper
  *
  */
@@ -119,32 +134,14 @@ const serializeWrapper = async (
   rsc = false,
 ): Promise<MDXRemoteSerializeResult> => {
   const toc: HeadingTocItem[] = [];
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function markdownToMarkdown(rawf: string) {
-    const file = await unified()
-      .use(remarkParse)
-      .use(remarkStringify)
-      .use(remarkFrontmatter, ["yaml", "toml"])
-      .use(remarkFixGuillemets)
-      .use(remarkTextr, {
-        plugins: [guillemets],
-      })
-      .use(remarkFixBreaks)
-      .use(() => (tree: Root) => {
-        console.dir(tree);
-      })
-      .process(rawf);
-
-    return file;
-  }
+  const format = mdxOptions.format ?? "mdx";
 
   async function fileToFile(rawfile: string) {
     return pipe<string>(breakline, horizontalline, guillemets)(rawfile);
   }
 
-  // const processedSource = await markdownToMarkdown(source);
-  const processedSource = await fileToFile(String(source));
+  const processedSource =
+    format === "mdx" ? await fileToFile(String(source)) : source;
 
   return await serialize(
     processedSource,
@@ -154,6 +151,7 @@ const serializeWrapper = async (
       mdxOptions: {
         ...mdxOptions,
         remarkPlugins: [
+          ...(format === "md" ? [remarkFixGuillemets] : []),
           [
             smartypants,
             {
@@ -175,10 +173,10 @@ const serializeWrapper = async (
           [
             remarkTextr,
             {
-              plugins: [scoped, rare],
+              plugins:
+                format === "md" ? [scoped, rare, guillemets] : [scoped, rare],
             },
           ],
-          // remarkBreaks, // each "enter" becomes <br>
           remarkDefinitionList,
           remarkSuperSub,
           [
@@ -206,6 +204,7 @@ const serializeWrapper = async (
           remarkCodeTitles,
         ],
         rehypePlugins: [
+          ...(format === "md" ? [rehypeRaw] : []), // to support html in markdown
           rehypePreLanguage, // to add "data-language" property to pre elements.
           rehypeSlug, // to add ids to headings.
           [
