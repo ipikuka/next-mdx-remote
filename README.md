@@ -1,4 +1,4 @@
-# do not install yet the `@ipikuka/next-mdx-remote`, it is in alpha stage (you will be able to install it when it is beta)
+# It is in `beta` stage. I need you test the `@ipikuka/next-mdx-remote` in order to get feedback
 
 # @ipikuka/next-mdx-remote
 
