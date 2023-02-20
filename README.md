@@ -15,18 +15,17 @@ The `@ipikuka/next-mdx-remote` provides a `serialize` function. The `serialize` 
 
 The remark plugins used in the `@ipikuka/next-mdx-remote` are:
 
-- remark-breaks (disabled for now)
 - remark-definition-list
 - remark-emoji
 - remark-fix-guillemets
 - remark-flexible-code-titles
 - remark-flexible-containers
+- remark-flexible-paragraphs
 - remark-gemoji
 - remark-gfm
 - remark-smartypants
 - remark-supersub
 - remark-textr
-- remark-fix-breaks (custom)
 - remark-textr-plugins (custom)
 - remark-toc-headings (custom)
 
@@ -35,6 +34,7 @@ The rehype plugins that the `@ipikuka/next-mdx-remote` uses are:
 - rehype-autolink-headings
 - rehype-prism-plus
 - rehype-slug
+- rehype-raw
 - rehype-pre-language (custom)
 
 ## Installation
