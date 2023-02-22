@@ -1,5 +1,9 @@
 /* eslint-disable require-unicode-regexp */
 
+// U+00A0 NO-BREAK SPACE
+// U+202F NARROW NO-BREAK SPACE
+// U+0020 SPACE
+
 /**
  * Textr plugin: a function that replaces below.
  *
@@ -11,103 +15,100 @@
  *
  * @type {import('remark-textr').TextrPlugin}
  */
-function scoped(input: string): string {
-  const SCOPED_ABBR_RE = /\((c|tm|r)\)/gi;
+function trademarks(input: string): string {
+  const REGEX = /\((c|tm|r)\)/gi;
 
-  if (!SCOPED_ABBR_RE.test(input)) return input;
+  if (!REGEX.test(input)) return input;
 
-  const SCOPED_ABBR = {
-    c: "©",
-    r: "®",
-    tm: "™",
+  const copyright = "\u00A9"; // © copyright
+  const trademark = "\u2122"; // ™ trademark
+  const registeredTrademark = "\u00AE"; // ® registered trademark
+
+  const ABBR = {
+    c: copyright,
+    tm: trademark,
+    r: registeredTrademark,
   };
 
   function replaceFn(match: string, name: string): string {
-    return SCOPED_ABBR[name.toLowerCase() as keyof typeof SCOPED_ABBR];
+    return ABBR[name.toLowerCase() as keyof typeof ABBR];
   }
 
-  return input.replace(SCOPED_ABBR_RE, replaceFn);
+  const _middle = input.replace(REGEX, replaceFn);
+
+  const output = _middle
+    .replace(/© *(\d)/g, "© $1") // single space before copyright
+    .replace(/ *(™)/g, "$1"); // remove spaces before trademark
+
+  return output;
 }
 
 /**
  * Textr plugin: a function that replaces below.
  *
- * +- → ±
- * ... → … (also ?.... → ?.., !.... → !..)
- * ???????? → ???, !!!!! → !!!, `,,` → `,`
- * -- → &ndash;, --- → &mdash;
- *
  * inspired from https://github.com/markdown-it/markdown-it/blob/master/lib/rules_core/replacements.js
  *
  * @type {import('remark-textr').TextrPlugin}
  */
-function rare(input: string): string {
-  const RARE_RE = /\+-|\.\.|\?\?\?\?|!!!!|,,|--/;
+function typographic(input: string): string {
+  const REGEX = /\+-|\.\.|\?\?\?\?|!!!!|,,| +| [.,]/;
 
-  if (!RARE_RE.test(input)) return input;
+  if (!REGEX.test(input)) return input;
 
   return (
     input
-      // gender
-      .replace(/\+-/g, "±")
-      // .., ..., ....... -> …
-      // ?..... & !..... -> ?.. & !..
+      // .. ... ....... -> …
       .replace(/\.{2,}/g, "…")
+      // ?..... & !..... -> ?.. & !..
       .replace(/([!?])…/g, "$1..")
+      // ???? & !!!!!! -> ??? & !!!
       .replace(/([!?]){4,}/g, "$1$1$1")
-      // doble comma `,,` → `,`
+      // ,, ,,, ,,,,, → ,
       .replace(/,{2,}/g, ",")
-      // em-dash --- → &mdash;
-      .replace(/(^|[^-])---(?=[^-]|$)/gm, "$1\u2014")
-      // en-dash -- → &ndash;
-      .replace(/(^|\s)--(?=\s|$)/gm, "$1\u2013")
-      .replace(/(^|[^\s-])--(?=[^\s-]|$)/gm, "$1\u2013")
+      // single space
+      .replace(/ +/g, " ")
+      // remove the space before comma or dot
+      .replace(/ ([.,])/g, "$1")
   );
 }
 
 /**
- * Textr plugin: a function that replaces triple dots with ellipses.
+ * Textr plugin: a function that replaces math equations.
  *
  * @type {import('remark-textr').TextrPlugin}
  */
-function ellipses(input: string): string {
-  return input.replace(/\.{3}/g, "…");
-}
+function math(input: string): string {
+  const REGEX = /.+ *\+-|\([-/+÷xX]\)/;
 
-/**
- * Textr plugin: a function that replaces (c) or (R) with the © mark.
- *
- * @type {import('remark-textr').TextrPlugin}
- */
-function copyright(input: string): string {
-  return input.replace(/\(c\)/gi, "©");
-}
+  if (!REGEX.test(input)) return input;
 
-/**
- * Textr plugin: a function that replaces (r) or (R) with the ® mark.
- *
- * @type {import('remark-textr').TextrPlugin}
- */
-function companymark(input: string): string {
-  return input.replace(/\(r\)/gi, "®");
-}
+  const nnbspace = "\u202F"; // narrow non-breaking space
 
-/**
- * Textr plugin: a function that replaces (tm) or (TM) with the ™ mark.
- *
- * @type {import('remark-textr').TextrPlugin}
- */
-function trademark(input: string): string {
-  return input.replace(/\(tm\)/gi, "™");
-}
+  /***
+   *
+   * plus in parenthesis (+) turns into U+002B + PLUS SIGN
+   * dash in parenthesis (-) turns into U+2212 − MINUS SIGN
+   * x in parenthesis (x) turns into U+00D7 × MULTIPLICATION SIGN
+   * X in parenthesis (X) turns into U+00D7 × MULTIPLICATION SIGN
+   * slash in parenthesis (/) turns into U+2215 ∕ DIVISION SLASH
+   * U+00F7 ÷ in parenthesis (÷) turns into U+00F7 ÷ DIVISION SIGN
+   *
+   */
 
-/**
- * Textr plugin: a function that replaces +- with the ± mark.
- *
- * @type {import('remark-textr').TextrPlugin}
- */
-function gender(input: string): string {
-  return input.replace(/\+-/gimu, "±");
+  return (
+    input
+      // +- -> ±    -+ -> ∓
+      .replace(/\+-/g, "±")
+      .replace(/-\+/g, "∓")
+      // signs in paranthesis, (x) (X) (+) (-) (/) (÷) -> × + − ∕ ÷
+      .replace(/(\w+) *\(x\) *(\w+)/g, `$1${nnbspace}×${nnbspace}$2`)
+      .replace(/(\w+) *\(X\) *(\w+)/g, `$1${nnbspace}×${nnbspace}$2`)
+      .replace(/(\w+) *\(-\) *(\w+)/g, `$1${nnbspace}−${nnbspace}$2`)
+      .replace(/(\w+) *\(÷\) *(\w+)/g, `$1${nnbspace}÷${nnbspace}$2`)
+      .replace(/(\w+) *\([/]\) *(\w+)/g, `$1${nnbspace}∕${nnbspace}$2`)
+      .replace(/(\w+) *\([+]\) *(\w+)/g, `$1${nnbspace}+${nnbspace}$2`)
+      .replace(/ *= */g, `${nnbspace}=${nnbspace}`)
+  );
 }
 
 /**
@@ -134,28 +135,57 @@ function horizontalline(input: string): string {
  * @type {import('remark-textr').TextrPlugin}
  */
 function guillemets(input: string): string {
-  const leftMark = "\u00AB";
-  const rightMark = "\u00BB";
-  const spaceChar = "\u202F";
+  const leftMark = "\u00AB"; // «
+  const rightMark = "\u00BB"; // »
+  const nnbspace = "\u202F"; // narrow non-breaking space
 
-  const leftAnglePattern = /<<\s*/gm;
-  const rightAnglePattern = /\s*>>/gm;
+  const leftAnglePattern = /<</g;
+  const rightAnglePattern = />>/g;
+
+  const _fixed = input
+    .replace(leftAnglePattern, leftMark)
+    .replace(rightAnglePattern, rightMark);
+
+  const leftMarkPattern = /(?<![(])«(?![)]) */g;
+  const rightMarkPattern = / *(?<![(])»(?![)])/g;
+
+  const _space_fixed = _fixed
+    .replace(leftMarkPattern, `${leftMark}${nnbspace}`)
+    .replace(rightMarkPattern, `${nnbspace}${rightMark}`);
+
+  const leftMathPattern = / *\(«\) */g;
+  const rightMathPattern = / *\(»\) */g;
+
+  const _math_fixed = _space_fixed
+    .replace(leftMathPattern, `${nnbspace}${leftMark}${nnbspace}`)
+    .replace(rightMathPattern, `${nnbspace}${rightMark}${nnbspace}`);
+
+  return _math_fixed;
+}
+
+/**
+ * Textr plugin: a function that replaces <= and => with the ≤ and ≥ marks.
+ *
+ * @type {import('remark-textr').TextrPlugin}
+ */
+function orEqual(input: string): string {
+  const greaterOrEqualThanPattern = /(\w) *>= *(\w)/g;
+  const smallerOrEqualThanPattern = /(\w) *<= *(\w)/g;
+
+  const nnbspace = "\u202F";
 
   return input
-    .replace(leftAnglePattern, leftMark.concat(spaceChar))
-    .replace(rightAnglePattern, spaceChar.concat(rightMark));
+    .replace(greaterOrEqualThanPattern, `$1${nnbspace}≥${nnbspace}$2`)
+    .replace(smallerOrEqualThanPattern, `$1${nnbspace}≤${nnbspace}$2`);
 }
 
 export {
-  scoped,
-  rare,
+  trademarks,
+  typographic,
+  math,
+  orEqual,
   breakline,
   horizontalline,
-  ellipses,
-  copyright,
-  companymark,
-  trademark,
-  gender,
   guillemets,
 };
 

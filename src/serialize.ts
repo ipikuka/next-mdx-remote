@@ -27,11 +27,13 @@ import { h } from "hastscript";
 import { type VFileCompatible } from "vfile";
 
 import {
-  rare,
-  scoped,
-  guillemets,
+  trademarks,
+  typographic,
+  math,
   breakline,
   horizontalline,
+  guillemets,
+  orEqual,
 } from "./lib/remark-textr-plugins.js";
 import rehypePreLanguage from "./lib/rehype-pre-language.js";
 import remarkTocHeadings from "./lib/remark-toc-headings.js";
@@ -137,7 +139,12 @@ const serializeWrapper = async (
   const format = mdxOptions.format ?? "mdx";
 
   async function fileToFile(rawfile: string) {
-    return pipe<string>(breakline, horizontalline, guillemets)(rawfile);
+    return pipe<string>(
+      breakline,
+      horizontalline,
+      orEqual,
+      guillemets,
+    )(rawfile);
   }
 
   const processedSource =
@@ -174,11 +181,22 @@ const serializeWrapper = async (
             remarkTextr,
             {
               plugins:
-                format === "md" ? [scoped, rare, guillemets] : [scoped, rare],
+                format === "md"
+                  ? [orEqual, guillemets, trademarks, typographic, math] // order is matter
+                  : [trademarks, typographic, math], // order is matter
             },
           ],
           remarkDefinitionList,
+          remarkFlexibleParagraphs,
           remarkSuperSub,
+          remarkGemoji,
+          [
+            remarkEmoji,
+            {
+              padSpaceAfter: false,
+              emoticon: true,
+            },
+          ],
           [
             remarkFlexibleContainers,
             {
@@ -191,15 +209,6 @@ const serializeWrapper = async (
                 };
               },
             } as FlexibleContainerOptions,
-          ],
-          remarkFlexibleParagraphs,
-          remarkGemoji,
-          [
-            remarkEmoji,
-            {
-              padSpaceAfter: false,
-              emoticon: true,
-            },
           ],
           remarkCodeTitles,
         ],
