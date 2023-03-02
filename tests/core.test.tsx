@@ -26,7 +26,7 @@ describe("serialize", () => {
   test("with component", async () => {
     const result = await renderStatic('foo <Test name="test" />', {
       components: {
-        Test: ({ name }) => <span>hello {name}</span>,
+        Test: ({ name }: { name: string }) => <span>hello {name}</span>,
       },
     });
     expect(result).toMatchInlineSnapshot(
@@ -130,7 +130,7 @@ describe("serialize", () => {
   // ******************************************
   test("fragments", async () => {
     const components = {
-      Test: ({ content }: { content: React.ReactElement }) => content,
+      Test: ({ content }: { content: string }) => <>{content}</>,
     };
 
     const result = await renderStatic(
@@ -153,7 +153,10 @@ describe("serialize", () => {
       parseFrontmatter: true,
     });
 
-    expect(result.frontmatter?.hello).toEqual("world");
+    // Validating type correctness here, this should not error
+    expect(<MDXRemote {...result} />).toBeTruthy();
+
+    expect(result.frontmatter.hello).toEqual("world");
   });
 
   // ******************************************
@@ -171,7 +174,35 @@ describe("serialize", () => {
       parseFrontmatter: true,
     });
 
-    expect(result.frontmatter?.tags).toEqual(["javascript", "html"]);
+    // Validating type correctness here, this should not error
+    expect(<MDXRemote {...result} />).toBeTruthy();
+
+    expect(result.frontmatter.tags).toEqual(["javascript", "html"]);
+  });
+
+  test("parses frontmatter - serialize result - with type", async () => {
+    interface Frontmatter {
+      hello: string;
+    }
+
+    const input = dedent(`
+      ---
+      hello: world
+      ---
+      # Hello
+    `);
+
+    const result = await serialize<Record<string, unknown>, Frontmatter>(
+      input,
+      {
+        parseFrontmatter: true,
+      },
+    );
+
+    // Validating type correctness here, this should not error
+    expect(<MDXRemote {...result} />).toBeTruthy();
+
+    expect(result.frontmatter.hello).toEqual("world");
   });
 
   // ******************************************
@@ -183,7 +214,7 @@ describe("serialize", () => {
       # Hello {frontmatter.hello}
     `);
 
-    const result = await serialize(input, {
+    const result = await renderStatic(input, {
       parseFrontmatter: true,
     });
 
@@ -219,5 +250,29 @@ describe("serialize", () => {
   test("supports Buffer", async () => {
     const result = await renderStatic(Buffer.from("foo **bar**"));
     expect(result).toMatchInlineSnapshot(`"<p>foo <strong>bar</strong></p>"`);
+  });
+
+  // ******************************************
+  test("infers the type of the frontmatter", async () => {
+    const input = dedent(`
+      ---
+      title: The Title
+      ---
+      # Hello
+    `);
+
+    type Frontmatter = {
+      title: string;
+    };
+
+    const { frontmatter } = await serialize<
+      Record<string, unknown>,
+      Frontmatter
+    >(input, {
+      parseFrontmatter: true,
+    });
+
+    expect(frontmatter).toHaveProperty("title");
+    expect(frontmatter).toEqual({ title: "The Title" });
   });
 });

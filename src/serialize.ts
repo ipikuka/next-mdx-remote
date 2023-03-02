@@ -126,7 +126,10 @@ const pluginLogTree = () => (tree: object) => {
  * Opinionated serialize wrapper
  *
  */
-const serializeWrapper = async (
+const serializeWrapper = async <
+  TScope = Record<string, unknown>,
+  TFrontmatter = Record<string, unknown>,
+>(
   source: VFileCompatible,
   {
     scope = {},
@@ -134,7 +137,7 @@ const serializeWrapper = async (
     parseFrontmatter = false,
   }: OpinionatedSerializeOptions = {},
   rsc = false,
-): Promise<MDXRemoteSerializeResult> => {
+): Promise<MDXRemoteSerializeResult<TScope, TFrontmatter>> => {
   const toc: HeadingTocItem[] = [];
   const format = mdxOptions.format ?? "mdx";
 
@@ -150,7 +153,7 @@ const serializeWrapper = async (
   const processedSource =
     format === "mdx" ? await fileToFile(String(source)) : source;
 
-  return await serialize(
+  return await serialize<TScope, TFrontmatter>(
     processedSource,
     {
       parseFrontmatter,

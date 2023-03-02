@@ -9,10 +9,12 @@ export async function renderStatic(
   source: VFileCompatible,
   {
     components,
-    scope,
+    scope = {},
     mdxOptions,
     parseFrontmatter,
-  }: OpinionatedSerializeOptions & Pick<MDXRemoteProps, "components"> = {},
+  }: Partial<
+    OpinionatedSerializeOptions & Pick<MDXRemoteProps, "components">
+  > = {},
 ): Promise<string> {
   const mdxSource = await serialize(source, {
     mdxOptions,
