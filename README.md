@@ -1,5 +1,3 @@
-# It is in `beta` stage. I need you test the `@ipikuka/next-mdx-remote` in order to get feedback
-
 # @ipikuka/next-mdx-remote
 
 [![NPM version][npm-image]][npm-url]
