@@ -477,4 +477,42 @@ describe("serialize - flexible containers", () => {
       `"<admonition class="remark-container danger" data-type="danger"><p>content</p></admonition>"`,
     );
   });
+
+  // ******************************************
+  test("flexible markers --> marked or highlighted texts in MDX", async () => {
+    const input = dedent(`
+      == ==
+
+      ==marked text==
+
+      =r= marked text ==
+    `);
+
+    const result = await renderStatic(input);
+
+    expect(result).toMatchInlineSnapshot(`
+      "<p><mark class="flexible-marker flexible-marker-empty"></mark></p>
+      <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
+      <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
+    `);
+  });
+
+  // ******************************************
+  test("flexible markers --> marked or highlighted texts in markdown", async () => {
+    const input = dedent(`
+        == ==
+
+        ==marked text==
+
+        =r= marked text ==
+      `);
+
+    const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+
+    expect(result).toMatchInlineSnapshot(`
+      "<p><mark class="flexible-marker flexible-marker-empty"></mark></p>
+      <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
+      <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
+    `);
+  });
 });

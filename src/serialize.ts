@@ -14,6 +14,7 @@ import {
   defListHastHandlers,
 } from "remark-definition-list";
 import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
+import remarkFlexibleMarkers from "remark-flexible-markers";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
@@ -168,6 +169,7 @@ const serializeWrapper = async <
               dashes: "oldschool",
             },
           ],
+          remarkFlexibleMarkers,
           [
             remarkTocHeadings,
             {

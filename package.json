@@ -60,6 +60,7 @@
     "remark-fix-guillemets": "^1.1.2",
     "remark-flexible-code-titles": "^1.1.2",
     "remark-flexible-containers": "^1.0.3",
+    "remark-flexible-markers": "^1.0.2",
     "remark-flexible-paragraphs": "^1.0.1",
     "remark-gemoji": "^7.0.1",
     "remark-gfm": "^3.0.1",
