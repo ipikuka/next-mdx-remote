@@ -13,13 +13,14 @@ This package is an opinionated wrapper (only `serialize` function) for the [next
 
 The `@ipikuka/next-mdx-remote` provides a `serialize` function. The `serialize` function is an opinionated wrapper of the `serialize` function of the `next-mdx-remote` which is a set of light utilities allowing MDX to be loaded within `getStaticProps` or `gerServerSideProps` and hydrated correctly on the client.
 
-The remark plugins used in the `@ipikuka/next-mdx-remote` are:
+The **remark plugins** used in the `@ipikuka/next-mdx-remote` are:
 
 - remark-definition-list
 - remark-emoji
 - remark-fix-guillemets
 - remark-flexible-code-titles
 - remark-flexible-containers
+- remark-flexible-markers
 - remark-flexible-paragraphs
 - remark-gemoji
 - remark-gfm
@@ -29,7 +30,7 @@ The remark plugins used in the `@ipikuka/next-mdx-remote` are:
 - remark-textr-plugins (custom)
 - remark-toc-headings (custom)
 
-The rehype plugins that the `@ipikuka/next-mdx-remote` uses are:
+The **rehype plugins** used in the `@ipikuka/next-mdx-remote` are:
 
 - rehype-autolink-headings
 - rehype-prism-plus
@@ -84,8 +85,8 @@ export default function TestPage({ source }) {
 }
 
 export async function getStaticProps() {
-  // MDX text - can be from a local file, database, anywhere
-  const source = "Some **mdx** text, with a component <Test />";
+  // the source can be from a local file, database, anywhere
+  const source = "Some mdx content with a component <Test />";
   const mdxSource = await serialize(source);
 
   return { props: { source: mdxSource } };
@@ -113,6 +114,13 @@ export type OpinionatedSerializeOptions = {
 };
 ```
 
+For example, you can specify the source is markdown `md`. (Default is MDX `mdx`).
+
+```js
+const source = "Some **bold text** and ==marked text==";
+const mdSource = await serialize(source, { mdxOptions: { format: "md" } });
+```
+
 Some `mdxOptions` are omitted from the official `mdxOptions` (See https://github.com/hashicorp/next-mdx-remote#apis). This is why the `@ipikuka/next-mdx-remote` is opinionated, providing some pre-selected plugins. The omitted options are:
 
 ```typescript
@@ -135,7 +143,7 @@ If you think that an omitted option is needed, you are wellcome to open an issue
 
 ## Examples:
 
-Need a playground with single page web application. (a PR is wellcome :))
+Need a playground with single page web application. _(PR is wellcome)_
 
 ## Types
 
