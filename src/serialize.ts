@@ -15,6 +15,7 @@ import {
 } from "remark-definition-list";
 import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
 import remarkFlexibleMarkers from "remark-flexible-markers";
+import remarkIns from "remark-ins";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
@@ -170,6 +171,7 @@ const serializeWrapper = async <
             },
           ],
           remarkFlexibleMarkers,
+          remarkIns,
           [
             remarkTocHeadings,
             {

@@ -64,6 +64,7 @@
     "remark-flexible-paragraphs": "^1.0.1",
     "remark-gemoji": "^7.0.1",
     "remark-gfm": "^3.0.1",
+    "remark-ins": "^1.0.0",
     "remark-smartypants": "^2.0.0",
     "remark-supersub": "^1.0.0",
     "remark-textr": "^5.0.1",

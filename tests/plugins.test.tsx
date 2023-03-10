@@ -515,4 +515,42 @@ describe("serialize - flexible containers", () => {
       <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
     `);
   });
+
+  // ******************************************
+  test("remark ins --> inserted texts in MDX", async () => {
+    const input = dedent(`
+      ++ ++
+
+      ++inserted text++
+
+      ++ inserted text   ++
+    `);
+
+    const result = await renderStatic(input);
+
+    expect(result).toMatchInlineSnapshot(`
+      "<p><ins class="remark-ins-empty"></ins></p>
+      <p><ins class="remark-ins">inserted text</ins></p>
+      <p><ins class="remark-ins">inserted text</ins></p>"
+    `);
+  });
+
+  // ******************************************
+  test("remark ins --> inserted texts in markdown", async () => {
+    const input = dedent(`
+      ++ ++
+
+      ++inserted text++
+
+      ++ inserted text   ++
+    `);
+
+    const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+
+    expect(result).toMatchInlineSnapshot(`
+      "<p><ins class="remark-ins-empty"></ins></p>
+      <p><ins class="remark-ins">inserted text</ins></p>
+      <p><ins class="remark-ins">inserted text</ins></p>"
+    `);
+  });
 });

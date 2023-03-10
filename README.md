@@ -24,6 +24,7 @@ The **remark plugins** used in the `@ipikuka/next-mdx-remote` are:
 - remark-flexible-paragraphs
 - remark-gemoji
 - remark-gfm
+- remark-ins
 - remark-smartypants
 - remark-supersub
 - remark-textr
