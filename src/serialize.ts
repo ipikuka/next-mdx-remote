@@ -71,6 +71,9 @@ const pipe =
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+// type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
+
 type OpinionatedMdxOptions = Pick<
   // eslint-disable-next-line @typescript-eslint/ban-types
   SerializeOptions["mdxOptions"] & {},

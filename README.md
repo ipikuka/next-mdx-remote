@@ -99,7 +99,7 @@ The `@ipikuka/next-mdx-remote` **serialize** function accepts the `OpinionatedSe
 All options are _optional_.
 
 ```typescript
-export type OpinionatedSerializeOptions = {
+type OpinionatedSerializeOptions = {
   scope?: Record<string, unknown>;
   parseFrontmatter?: boolean;
   mdxOptions?: {
@@ -168,8 +168,8 @@ It is a `Nextjs` compatible package.
 [next-mdx-remote]: https://github.com/hashicorp/next-mdx-remote
 [typescript]: https://www.typescriptlang.org/
 [license]: https://github.com/ipikuka/
-[npm-url]: https://www.npmjs.com/package/next-mdx-remote
-[npm-image]: https://img.shields.io/npm/v/next-mdx-remote
+[npm-url]: https://www.npmjs.com/package/@ipikuka/next-mdx-remote
+[npm-image]: https://img.shields.io/npm/v/@ipikuka/next-mdx-remote
 [github-license]: https://img.shields.io/github/license/ipikuka/next-mdx-remote
 [github-license-url]: https://github.com/ipikuka/next-mdx-remote/blob/master/LICENSE
 [github-build]: https://github.com/ipikuka/next-mdx-remote/actions/workflows/publish.yml/badge.svg
