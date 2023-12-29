@@ -2,8 +2,8 @@
   "include": ["src/**/*", "global.d.ts"],
   "exclude": ["src/lib_archive"],
   "compilerOptions": {
-    "target": "ESNext",
     "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
     "skipLibCheck": true,
@@ -11,8 +11,7 @@
     "strict": true,
     "declaration": true,
     "sourceMap": true,
-    "noImplicitReturns": true,
     "outDir": "dist/esm",
-    "types": ["node", "jest"]
+    "noImplicitReturns": true
   }
 }
