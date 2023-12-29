@@ -14,7 +14,9 @@ import {
   defListHastHandlers,
 } from "remark-definition-list";
 import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
-import remarkFlexibleMarkers from "remark-flexible-markers";
+import remarkFlexibleMarkers, {
+  type FlexibleMarkerOptions,
+} from "remark-flexible-markers";
 import remarkIns from "remark-ins";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
@@ -26,7 +28,7 @@ import type {
   SerializeOptions,
 } from "next-mdx-remote/dist/types";
 import { h } from "hastscript";
-import { type VFileCompatible } from "vfile";
+import { type Compatible } from "vfile";
 
 import {
   trademarks,
@@ -135,7 +137,7 @@ const serializeWrapper = async <
   TScope = Record<string, unknown>,
   TFrontmatter = Record<string, unknown>,
 >(
-  source: VFileCompatible,
+  source: Compatible,
   {
     scope = {},
     mdxOptions = {},
@@ -159,6 +161,7 @@ const serializeWrapper = async <
     format === "mdx" ? await fileToFile(String(source)) : source;
 
   return await serialize<TScope, TFrontmatter>(
+    //@ts-ignore
     processedSource,
     {
       parseFrontmatter,
@@ -173,7 +176,10 @@ const serializeWrapper = async <
               dashes: "oldschool",
             },
           ],
-          remarkFlexibleMarkers,
+          [
+            remarkFlexibleMarkers,
+            { doubleEqualityCheck: "=:=" } as FlexibleMarkerOptions,
+          ],
           remarkIns,
           [
             remarkTocHeadings,
@@ -210,7 +216,7 @@ const serializeWrapper = async <
           [
             remarkFlexibleContainers,
             {
-              title: null,
+              title: () => null,
               containerTagName: "admonition",
               containerProperties: (type, title) => {
                 return {
