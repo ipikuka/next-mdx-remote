@@ -389,7 +389,7 @@ describe("serialize - flexible code titles", () => {
   });
 
   // ******************************************
-  test("flexible code titles (file path)in MDX", async () => {
+  test("flexible code titles (file path) in MDX", async () => {
     const input = dedent(`
       \`\`\`js:C:\\users\\documents
       \`\`\`
@@ -459,7 +459,7 @@ describe("serialize - flexible containers", () => {
     const result = await renderStatic(input);
 
     expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container danger" data-type="danger"><p>content</p></admonition>"`,
+      `"<admonition class="remark-container danger" data-type="danger" data-title="Danger"><p>content</p></admonition>"`,
     );
   });
 
@@ -474,7 +474,7 @@ describe("serialize - flexible containers", () => {
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
 
     expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container danger" data-type="danger"><p>content</p></admonition>"`,
+      `"<admonition class="remark-container danger" data-type="danger" data-title="Danger"><p>content</p></admonition>"`,
     );
   });
 
@@ -485,13 +485,13 @@ describe("serialize - flexible containers", () => {
 
       ==marked text==
 
-      =r= marked text ==
+      =r=marked text==
     `);
 
     const result = await renderStatic(input);
 
     expect(result).toMatchInlineSnapshot(`
-      "<p><mark class="flexible-marker flexible-marker-empty"></mark></p>
+      "<p><mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark></p>
       <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
       <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
     `);
@@ -504,13 +504,13 @@ describe("serialize - flexible containers", () => {
 
         ==marked text==
 
-        =r= marked text ==
+        =r=marked text==
       `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
 
     expect(result).toMatchInlineSnapshot(`
-      "<p><mark class="flexible-marker flexible-marker-empty"></mark></p>
+      "<p><mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark></p>
       <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
       <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
     `);

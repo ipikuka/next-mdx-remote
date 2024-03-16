@@ -17,18 +17,21 @@ import remarkFlexibleParagraphs from "remark-flexible-paragraphs";
 import remarkFlexibleMarkers, {
   type FlexibleMarkerOptions,
 } from "remark-flexible-markers";
+import remarkFlexibleToc, { type TocItem } from "remark-flexible-toc";
 import remarkIns from "remark-ins";
 import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings, { type Options } from "rehype-autolink-headings";
+import rehypeAutolinkHeadings, {
+  type Options as AutolinkHeadingsOptions,
+} from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
 import rehypeRaw from "rehype-raw";
+import rehypePreLanguage from "rehype-pre-language";
 import { serialize } from "next-mdx-remote/serialize";
-import type {
-  MDXRemoteSerializeResult,
-  SerializeOptions,
-} from "next-mdx-remote/dist/types";
+import type { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { type CompileOptions, nodeTypes } from "@mdx-js/mdx";
 import { h } from "hastscript";
 import { type Compatible } from "vfile";
+import { html } from "./lib/rehype-handlers";
 
 import {
   trademarks,
@@ -39,16 +42,6 @@ import {
   guillemets,
   orEqual,
 } from "./lib/remark-textr-plugins.js";
-import rehypePreLanguage from "./lib/rehype-pre-language.js";
-import remarkTocHeadings from "./lib/remark-toc-headings.js";
-
-type HeadingTocItem = {
-  value: string;
-  url: string;
-  depth: number;
-  parent?: string;
-  level?: number[];
-};
 
 /**
  * Returns the Title Case of a given string
@@ -71,20 +64,14 @@ const pipe =
     fns.reduce((v, f) => f(v), x);
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type Prettify<T> = { [K in keyof T]: T[K] } & {};
+// type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 // type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
 type OpinionatedMdxOptions = Pick<
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  SerializeOptions["mdxOptions"] & {},
-  | "format"
-  | "mdExtensions"
-  | "mdxExtensions"
-  | "jsx"
-  | "useDynamicImport"
-  | "baseUrl"
+  CompileOptions,
+  "format" | "mdExtensions" | "mdxExtensions" | "baseUrl" | "development"
 >;
 
 // excluded mdxOptions --> {
@@ -99,13 +86,14 @@ type OpinionatedMdxOptions = Pick<
 //   jsxRuntime?: "automatic" | "classic" | undefined;
 //   SourceMapGenerator?: typeof SourceMapGenerator | undefined;
 //   development?: boolean | undefined;
+//   jsx?:
 // }
 
-export type OpinionatedSerializeOptions = Prettify<
-  Pick<SerializeOptions, "scope" | "parseFrontmatter"> & {
-    mdxOptions?: Prettify<OpinionatedMdxOptions>;
-  }
->;
+export type OpinionatedSerializeOptions = {
+  scope?: Record<string, unknown>;
+  mdxOptions?: OpinionatedMdxOptions;
+  parseFrontmatter?: boolean;
+};
 
 export { type MDXRemoteSerializeResult };
 
@@ -143,9 +131,8 @@ const serializeWrapper = async <
     mdxOptions = {},
     parseFrontmatter = false,
   }: OpinionatedSerializeOptions = {},
-  rsc = false,
 ): Promise<MDXRemoteSerializeResult<TScope, TFrontmatter>> => {
-  const toc: HeadingTocItem[] = [];
+  const toc: TocItem[] = [];
   const format = mdxOptions.format ?? "mdx";
 
   async function fileToFile(rawfile: string) {
@@ -182,7 +169,7 @@ const serializeWrapper = async <
           ],
           remarkIns,
           [
-            remarkTocHeadings,
+            remarkFlexibleToc,
             {
               exportRef: toc,
             },
@@ -221,7 +208,7 @@ const serializeWrapper = async <
               containerProperties: (type, title) => {
                 return {
                   ["data-type"]: type?.toLowerCase(),
-                  ["data-title"]: toTitleCase(title),
+                  ["data-title"]: toTitleCase(title) ?? toTitleCase(type),
                 };
               },
             } as FlexibleContainerOptions,
@@ -229,8 +216,8 @@ const serializeWrapper = async <
           remarkCodeTitles,
         ],
         rehypePlugins: [
-          ...(format === "md" ? [rehypeRaw] : []), // to support html in markdown
-          rehypePreLanguage, // to add "data-language" property to pre elements.
+          [rehypeRaw, { passThrough: nodeTypes }], // to allow HTML elements in "md" format, "passThrough" is for "mdx" works as well
+          [rehypePreLanguage, "data-language"], // to add "data-language" property to pre elements
           rehypeSlug, // to add ids to headings.
           [
             rehypeAutolinkHeadings,
@@ -238,7 +225,7 @@ const serializeWrapper = async <
               behavior: "prepend",
               properties: { className: "anchor-copylink" },
               content: () => [h("icon.copylink")],
-            } as Options,
+            } as AutolinkHeadingsOptions,
           ], // to add links to headings with ids back to themselves.
           [
             rehypePrismPlus,
@@ -250,11 +237,12 @@ const serializeWrapper = async <
         remarkRehypeOptions: {
           handlers: {
             ...defListHastHandlers,
+            // code, // to add language of the code element into pre as className
+            ...(format === "md" && { html }),
           },
         },
       },
     },
-    rsc,
   );
 };
 

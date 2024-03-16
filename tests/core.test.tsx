@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactDOMServer from "react-dom/server";
 import { MDXRemote } from "next-mdx-remote";
-import * as MDX from "@mdx-js/react";
+import { MDXProvider } from "@mdx-js/react";
 import { VFile } from "vfile";
 
 import { renderStatic } from "./utils";
@@ -84,13 +84,13 @@ describe("serialize", () => {
     const mdxSource = await serialize("<Test />");
 
     const result = ReactDOMServer.renderToStaticMarkup(
-      <MDX.MDXProvider
+      <MDXProvider
         components={{
           Test: () => <p>Hello world</p>,
         }}
       >
         <MDXRemote {...mdxSource} />
-      </MDX.MDXProvider>,
+      </MDXProvider>,
     );
 
     expect(result).toMatchInlineSnapshot(`"<p>Hello world</p>"`);
@@ -206,21 +206,19 @@ describe("serialize", () => {
   });
 
   // ******************************************
-  test.skip("parses frontmatter - rendered result", async () => {
+  test("parses frontmatter - rendered result", async () => {
     const input = dedent(`
       ---
       hello: world
       ---
-      # Hello {frontmatter.hello}
+      Hi {frontmatter.hello}
     `);
 
     const result = await renderStatic(input, {
       parseFrontmatter: true,
     });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<h1 id="hello-world"><a class="anchor-copylink" href="#hello-world"><icon class="copylink"></icon></a>Hello world</h1>"`,
-    );
+    expect(result).toMatchInlineSnapshot(`"<p>Hi world</p>"`);
   });
 
   // ******************************************
@@ -231,10 +229,10 @@ describe("serialize", () => {
       expect(error).toMatchInlineSnapshot(`
         [Error: [next-mdx-remote] error compiling MDX:
         Expected a closing tag for \`<GITHUB_USER>\` (1:18-1:31) before the end of \`paragraph\`
-
+        
         > 1 | This is very bad <GITHUB_USER>
-            | ^
-
+            |                  ^
+        
         More information: https://mdxjs.com/docs/troubleshooting-mdx]
       `);
     }

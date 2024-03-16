@@ -19,9 +19,10 @@ export async function renderStatic(
   const mdxSource = await serialize(source, {
     mdxOptions,
     parseFrontmatter,
+    scope,
   });
 
   return ReactDOMServer.renderToStaticMarkup(
-    <MDXRemote {...mdxSource} components={components} scope={scope} />,
+    <MDXRemote {...mdxSource} components={components} />,
   );
 }
