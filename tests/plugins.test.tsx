@@ -523,7 +523,7 @@ describe("serialize - flexible containers", () => {
 
       ++inserted text++
 
-      ++ inserted text   ++
+      ++ inserted text ++
     `);
 
     const result = await renderStatic(input);
@@ -531,7 +531,7 @@ describe("serialize - flexible containers", () => {
     expect(result).toMatchInlineSnapshot(`
       "<p><ins class="remark-ins-empty"></ins></p>
       <p><ins class="remark-ins">inserted text</ins></p>
-      <p><ins class="remark-ins">inserted text</ins></p>"
+      <p>++ inserted text ++</p>"
     `);
   });
 
@@ -542,7 +542,7 @@ describe("serialize - flexible containers", () => {
 
       ++inserted text++
 
-      ++ inserted text   ++
+      ++ inserted text ++
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
@@ -550,7 +550,7 @@ describe("serialize - flexible containers", () => {
     expect(result).toMatchInlineSnapshot(`
       "<p><ins class="remark-ins-empty"></ins></p>
       <p><ins class="remark-ins">inserted text</ins></p>
-      <p><ins class="remark-ins">inserted text</ins></p>"
+      <p>++ inserted text ++</p>"
     `);
   });
 });

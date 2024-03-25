@@ -1,6 +1,6 @@
-import { Element, Properties } from "hast";
-import { Code, Html } from "mdast";
-import { State, Raw } from "mdast-util-to-hast";
+import type { Element, Properties } from "hast";
+import type { Code, Html } from "mdast";
+import type { State, Raw } from "mdast-util-to-hast";
 
 /**
  * Turn an mdast `code` node into hast.
