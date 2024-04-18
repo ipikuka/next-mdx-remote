@@ -1,4 +1,5 @@
 import dedent from "dedent";
+import * as prettier from "prettier";
 
 import { renderStatic } from "./utils";
 
@@ -232,15 +233,35 @@ describe("serialize - superscript subscript", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
+    expect(formattedResult).toMatchInlineSnapshot(`
       "<ul>
-      <li>19<sup>th</sup> H<sub>2</sub>O</li>
-      <li>H<sub>2</sub>O 19<sup>th</sup></li>
+        <li>
+          19<sup>th</sup> H<sub>2</sub>O
+        </li>
+        <li>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </li>
       </ul>
-      <p>H<sub>2</sub>O 19<sup>th</sup> H<sub>2</sub>O 19<sup>th</sup></p>
-      <p><em>H<sub>2</sub>O 19<sup>th</sup></em> <strong>H<sub>2</sub>O 19<sup>th</sup></strong></p>
-      <h5 id="h2o-19th"><a class="anchor-copylink" href="#h2o-19th"><icon class="copylink"></icon></a>H<sub>2</sub>O 19<sup>th</sup></h5>"
+      <p>
+        H<sub>2</sub>O 19<sup>th</sup> H<sub>2</sub>O 19<sup>th</sup>
+      </p>
+      <p>
+        <em>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </em>{" "}
+        <strong>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </strong>
+      </p>
+      <h5 id="h2o-19th">
+        <a class="anchor-copylink" href="#h2o-19th">
+          <icon class="copylink"></icon>
+        </a>
+        H<sub>2</sub>O 19<sup>th</sup>
+      </h5>
+      "
     `);
   });
 
@@ -258,15 +279,35 @@ describe("serialize - superscript subscript", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
+    expect(formattedResult).toMatchInlineSnapshot(`
       "<ul>
-      <li>19<sup>th</sup> H<sub>2</sub>O</li>
-      <li>H<sub>2</sub>O 19<sup>th</sup></li>
+        <li>
+          19<sup>th</sup> H<sub>2</sub>O
+        </li>
+        <li>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </li>
       </ul>
-      <p>H<sub>2</sub>O 19<sup>th</sup> H<sub>2</sub>O 19<sup>th</sup></p>
-      <p><em>H<sub>2</sub>O 19<sup>th</sup></em> <strong>H<sub>2</sub>O 19<sup>th</sup></strong></p>
-      <h5 id="h2o-19th"><a class="anchor-copylink" href="#h2o-19th"><icon class="copylink"></icon></a>H<sub>2</sub>O 19<sup>th</sup></h5>"
+      <p>
+        H<sub>2</sub>O 19<sup>th</sup> H<sub>2</sub>O 19<sup>th</sup>
+      </p>
+      <p>
+        <em>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </em>{" "}
+        <strong>
+          H<sub>2</sub>O 19<sup>th</sup>
+        </strong>
+      </p>
+      <h5 id="h2o-19th">
+        <a class="anchor-copylink" href="#h2o-19th">
+          <icon class="copylink"></icon>
+        </a>
+        H<sub>2</sub>O 19<sup>th</sup>
+      </h5>
+      "
     `);
   });
 });
@@ -281,10 +322,24 @@ describe("serialize - flexible paragraphs", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p class="flexible-paragraph flexiparaph-warning flexiparaph-align-justify" style="text-align:justify">hello warning</p>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-success flexiparaph-align-left" style="text-align:left">hello success</p></div>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p
+        class="flexible-paragraph flexiparaph-warning flexiparaph-align-justify"
+        style="text-align:justify"
+      >
+        hello warning
+      </p>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-success flexiparaph-align-left"
+          style="text-align:left"
+        >
+          hello success
+        </p>
+      </div>
+      "
     `);
   });
 
@@ -297,10 +352,24 @@ describe("serialize - flexible paragraphs", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p class="flexible-paragraph flexiparaph-warning flexiparaph-align-justify" style="text-align:justify">hello warning</p>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-success flexiparaph-align-left" style="text-align:left">hello success</p></div>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p
+        class="flexible-paragraph flexiparaph-warning flexiparaph-align-justify"
+        style="text-align:justify"
+      >
+        hello warning
+      </p>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-success flexiparaph-align-left"
+          style="text-align:left"
+        >
+          hello success
+        </p>
+      </div>
+      "
     `);
   });
 
@@ -318,16 +387,50 @@ describe("serialize - flexible paragraphs", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
+    expect(formattedResult).toMatchInlineSnapshot(`
       "<p class="flexible-paragraph">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-center" style="text-align:center">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-right" style="text-align:right">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p></div>"
+      <p
+        class="flexible-paragraph flexiparaph-align-center"
+        style="text-align:center"
+      >
+        hello
+      </p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">
+        hello
+      </p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">
+        hello
+      </p>
+      <div class="flexible-paragraph-wrapper">
+        <p class="flexible-paragraph">hello</p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-right"
+          style="text-align:right"
+        >
+          hello
+        </p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-justify"
+          style="text-align:justify"
+        >
+          hello
+        </p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-justify"
+          style="text-align:justify"
+        >
+          hello
+        </p>
+      </div>
+      "
     `);
   });
 
@@ -345,16 +448,50 @@ describe("serialize - flexible paragraphs", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
+    expect(formattedResult).toMatchInlineSnapshot(`
       "<p class="flexible-paragraph">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-center" style="text-align:center">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
-      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">hello</p>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-right" style="text-align:right">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p></div>
-      <div class="flexible-paragraph-wrapper"><p class="flexible-paragraph flexiparaph-align-justify" style="text-align:justify">hello</p></div>"
+      <p
+        class="flexible-paragraph flexiparaph-align-center"
+        style="text-align:center"
+      >
+        hello
+      </p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">
+        hello
+      </p>
+      <p class="flexible-paragraph flexiparaph-align-left" style="text-align:left">
+        hello
+      </p>
+      <div class="flexible-paragraph-wrapper">
+        <p class="flexible-paragraph">hello</p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-right"
+          style="text-align:right"
+        >
+          hello
+        </p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-justify"
+          style="text-align:justify"
+        >
+          hello
+        </p>
+      </div>
+      <div class="flexible-paragraph-wrapper">
+        <p
+          class="flexible-paragraph flexiparaph-align-justify"
+          style="text-align:justify"
+        >
+          hello
+        </p>
+      </div>
+      "
     `);
   });
 });
@@ -368,10 +505,17 @@ describe("serialize - flexible code titles", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<div class="remark-code-container"><div class="remark-code-title">title.js</div><pre data-language="js" class="language-js"><code class="language-js code-highlight"></code></pre></div>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<div class="remark-code-container">
+        <div class="remark-code-title">title.js</div>
+        <pre class="language-js" data-language="js">
+          <code class="language-js code-highlight"></code>
+        </pre>
+      </div>
+      "
+    `);
   });
 
   // ******************************************
@@ -382,10 +526,17 @@ describe("serialize - flexible code titles", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<div class="remark-code-container"><div class="remark-code-title">title.js</div><pre data-language="js" class="language-js"><code class="language-js code-highlight"></code></pre></div>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<div class="remark-code-container">
+        <div class="remark-code-title">title.js</div>
+        <pre class="language-js" data-language="js">
+          <code class="language-js code-highlight"></code>
+        </pre>
+      </div>
+      "
+    `);
   });
 
   // ******************************************
@@ -396,10 +547,17 @@ describe("serialize - flexible code titles", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<div class="remark-code-container"><div class="remark-code-title">C:\\users\\documents</div><pre data-language="js" class="language-js"><code class="language-js code-highlight"></code></pre></div>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<div class="remark-code-container">
+        <div class="remark-code-title">C:\\users\\documents</div>
+        <pre class="language-js" data-language="js">
+          <code class="language-js code-highlight"></code>
+        </pre>
+      </div>
+      "
+    `);
   });
 
   // ******************************************
@@ -410,10 +568,17 @@ describe("serialize - flexible code titles", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<div class="remark-code-container"><div class="remark-code-title">C:\\users\\documents</div><pre data-language="js" class="language-js"><code class="language-js code-highlight"></code></pre></div>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<div class="remark-code-container">
+        <div class="remark-code-title">C:\\users\\documents</div>
+        <pre class="language-js" data-language="js">
+          <code class="language-js code-highlight"></code>
+        </pre>
+      </div>
+      "
+    `);
   });
 });
 
@@ -427,10 +592,18 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container warning" data-type="warning" data-title="Title"><p>content</p></admonition>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<admonition
+        class="remark-container warning"
+        data-type="warning"
+        data-title="Title"
+      >
+        <p>content</p>
+      </admonition>
+      "
+    `);
   });
 
   // ******************************************
@@ -442,10 +615,18 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container warning" data-type="warning" data-title="Title"><p>content</p></admonition>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<admonition
+        class="remark-container warning"
+        data-type="warning"
+        data-title="Title"
+      >
+        <p>content</p>
+      </admonition>
+      "
+    `);
   });
 
   // ******************************************
@@ -457,10 +638,18 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container danger" data-type="danger" data-title="Danger"><p>content</p></admonition>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<admonition
+        class="remark-container danger"
+        data-type="danger"
+        data-title="Danger"
+      >
+        <p>content</p>
+      </admonition>
+      "
+    `);
   });
 
   // ******************************************
@@ -472,10 +661,18 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(
-      `"<admonition class="remark-container danger" data-type="danger" data-title="Danger"><p>content</p></admonition>"`,
-    );
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<admonition
+        class="remark-container danger"
+        data-type="danger"
+        data-title="Danger"
+      >
+        <p>content</p>
+      </admonition>
+      "
+    `);
   });
 
   // ******************************************
@@ -489,11 +686,19 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p><mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark></p>
-      <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
-      <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p>
+        <mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark>
+      </p>
+      <p>
+        <mark class="flexible-marker flexible-marker-default">marked text</mark>
+      </p>
+      <p>
+        <mark class="flexible-marker flexible-marker-red">marked text</mark>
+      </p>
+      "
     `);
   });
 
@@ -508,11 +713,19 @@ describe("serialize - flexible containers", () => {
       `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p><mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark></p>
-      <p><mark class="flexible-marker flexible-marker-default">marked text</mark></p>
-      <p><mark class="flexible-marker flexible-marker-red">marked text</mark></p>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p>
+        <mark class="flexible-marker flexible-marker-default flexible-marker-empty"></mark>
+      </p>
+      <p>
+        <mark class="flexible-marker flexible-marker-default">marked text</mark>
+      </p>
+      <p>
+        <mark class="flexible-marker flexible-marker-red">marked text</mark>
+      </p>
+      "
     `);
   });
 
@@ -527,11 +740,17 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input);
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p><ins class="remark-ins-empty"></ins></p>
-      <p><ins class="remark-ins">inserted text</ins></p>
-      <p>++ inserted text ++</p>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p>
+        <ins class="remark-ins-empty"></ins>
+      </p>
+      <p>
+        <ins class="remark-ins">inserted text</ins>
+      </p>
+      <p>++ inserted text ++</p>
+      "
     `);
   });
 
@@ -546,11 +765,17 @@ describe("serialize - flexible containers", () => {
     `);
 
     const result = await renderStatic(input, { mdxOptions: { format: "md" } });
+    const formattedResult = await prettier.format(result, { parser: "mdx" });
 
-    expect(result).toMatchInlineSnapshot(`
-      "<p><ins class="remark-ins-empty"></ins></p>
-      <p><ins class="remark-ins">inserted text</ins></p>
-      <p>++ inserted text ++</p>"
+    expect(formattedResult).toMatchInlineSnapshot(`
+      "<p>
+        <ins class="remark-ins-empty"></ins>
+      </p>
+      <p>
+        <ins class="remark-ins">inserted text</ins>
+      </p>
+      <p>++ inserted text ++</p>
+      "
     `);
   });
 });

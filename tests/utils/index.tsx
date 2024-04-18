@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote";
 import { type VFileCompatible } from "vfile";
 
-import serialize, { type OpinionatedSerializeOptions } from "../src";
+import serialize, { type SerializeOptions } from "../../src";
 
 export async function renderStatic(
   source: VFileCompatible,
@@ -12,9 +12,7 @@ export async function renderStatic(
     scope = {},
     mdxOptions,
     parseFrontmatter,
-  }: Partial<
-    OpinionatedSerializeOptions & Pick<MDXRemoteProps, "components">
-  > = {},
+  }: Partial<SerializeOptions & Pick<MDXRemoteProps, "components">> = {},
 ): Promise<string> {
   const mdxSource = await serialize(source, {
     mdxOptions,

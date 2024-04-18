@@ -42,18 +42,6 @@ The **rehype plugins** used in the `@ipikuka/next-mdx-remote` are:
 This package is suitable for ESM module only. In Node.js (16.0+), install with npm:
 
 ```bash
-npm install next-mdx-remote @ipikuka/next-mdx-remote
-```
-
-or
-
-```bash
-yarn add next-mdx-remote @ipikuka/next-mdx-remote
-```
-
-If you installed the `next-mdx-remote` already, then install only:
-
-```bash
 npm install @ipikuka/next-mdx-remote
 ```
 
@@ -65,7 +53,7 @@ yarn add @ipikuka/next-mdx-remote
 
 ## Usage
 
-This package is peer dependant with `react`, `react-dom` and `next-mdx-remote` (by hashicorp). So, it is assumed that you have already installed them in your `nextjs` project.
+This package is peer dependant with `react`, `react-dom` So, it is assumed that you have already installed them in your `nextjs` project.
 
 ```js
 import { MDXRemote } from "next-mdx-remote";

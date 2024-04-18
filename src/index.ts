@@ -1,8 +1,8 @@
 import serialize, {
-  type OpinionatedSerializeOptions,
+  type SerializeOptions,
   type MDXRemoteSerializeResult,
 } from "./serialize.js";
 
-export type { OpinionatedSerializeOptions, MDXRemoteSerializeResult };
+export type { SerializeOptions, MDXRemoteSerializeResult };
 
 export default serialize;

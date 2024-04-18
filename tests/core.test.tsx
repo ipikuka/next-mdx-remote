@@ -181,9 +181,9 @@ describe("serialize", () => {
   });
 
   test("parses frontmatter - serialize result - with type", async () => {
-    interface Frontmatter {
+    type Frontmatter = {
       hello: string;
-    }
+    };
 
     const input = dedent(`
       ---
