@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote";
-import { type VFileCompatible } from "vfile";
+import { type Compatible } from "vfile";
 
-import serialize, { type SerializeOptions } from "../../src";
+import { serialize, type SerializeOptions } from "../../src/serialize";
 
 export async function renderStatic(
-  source: VFileCompatible,
+  source: Compatible,
   {
     components,
     scope = {},

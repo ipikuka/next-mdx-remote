@@ -3,11 +3,11 @@ import ReactDOMServer from "react-dom/server";
 import { MDXRemote } from "next-mdx-remote";
 import { MDXProvider } from "@mdx-js/react";
 import { VFile } from "vfile";
+import dedent from "dedent";
+
+import { serialize } from "../src/serialize";
 
 import { renderStatic } from "./utils";
-
-import serialize from "../src";
-import dedent from "dedent";
 
 /**
  *
