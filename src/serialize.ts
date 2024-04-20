@@ -1,4 +1,4 @@
-import { serialize } from "next-mdx-remote/serialize";
+import { serialize as serialize_ } from "next-mdx-remote/serialize";
 import { type MDXRemoteSerializeResult } from "next-mdx-remote";
 import { plugins, prepare, type TocItem } from "@ipikuka/plugins";
 import { type CompileOptions } from "@mdx-js/mdx";
@@ -30,7 +30,7 @@ export { type MDXRemoteSerializeResult, type SerializeOptions };
  * Opinionated serialize wrapper for "next-mdx-remote/serialize"
  *
  */
-const serializeWrapper = async <
+export async function serialize<
   TScope extends Record<string, unknown> = Record<string, unknown>,
   TFrontmatter extends Record<string, unknown> = Record<string, unknown>,
 >(
@@ -38,14 +38,14 @@ const serializeWrapper = async <
   { mdxOptions, parseFrontmatter, scope }: SerializeOptions = {},
 ): Promise<
   MDXRemoteSerializeResult<TScope & { toc: TocItem[] }, TFrontmatter>
-> => {
+> {
   const toc: TocItem[] = [];
 
   const { format: format_, ...rest } = mdxOptions || {};
   const format = format_ === "md" || format_ === "mdx" ? format_ : "mdx";
   const processedSource = format === "mdx" ? prepare(source) : source;
 
-  return await serialize<TScope & { toc: TocItem[] }, TFrontmatter>(
+  return await serialize_<TScope & { toc: TocItem[] }, TFrontmatter>(
     processedSource,
     {
       parseFrontmatter,
@@ -57,6 +57,4 @@ const serializeWrapper = async <
       },
     },
   );
-};
-
-export default serializeWrapper;
+}

@@ -1,8 +1,5 @@
-import serialize, {
-  type SerializeOptions,
+export {
+  MDXRemote,
   type MDXRemoteSerializeResult,
-} from "./serialize.js";
-
-export type { SerializeOptions, MDXRemoteSerializeResult };
-
-export default serialize;
+  type MDXRemoteProps,
+} from "next-mdx-remote";
