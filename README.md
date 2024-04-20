@@ -5,37 +5,19 @@
 ![npm-typescript]
 [![License][github-license]][github-license-url]
 
-This package is an opinionated wrapper (only `serialize` function) for the [next-mdx-remote][next-mdx-remote] package that written by hashicorp.
+This package is an opinionated wrapper of the [next-mdx-remote][next-mdx-remote].
 
 ## When should I use this?
 
 The `@ipikuka/next-mdx-remote` provides a `serialize` function. The `serialize` function is an opinionated wrapper of the `serialize` function of the `next-mdx-remote` which is a set of light utilities allowing MDX to be loaded within `getStaticProps` or `gerServerSideProps` and hydrated correctly on the client.
 
-The **remark plugins** used in the `@ipikuka/next-mdx-remote` are:
+The **plugins** used in the `@ipikuka/next-mdx-remote` comes from [**`@ipikuka/plugins`**](https://github.com/ipikuka/plugins/).
 
-- remark-definition-list
-- remark-emoji
-- remark-fix-guillemets
-- remark-flexible-code-titles
-- remark-flexible-containers
-- remark-flexible-markers
-- remark-flexible-paragraphs
-- remark-gemoji
-- remark-gfm
-- remark-ins
-- remark-smartypants
-- remark-supersub
-- remark-textr
-- remark-textr-plugins (custom)
-- remark-toc-headings (custom)
+**`@ipikuka/plugins`** provides **`remarkPlugins`**, **`rehypePlugins`**, **`recmaPlugins`**, and **`remarkRehypeOptions`**.
 
-The **rehype plugins** used in the `@ipikuka/next-mdx-remote` are:
+Thanks to `@ipikuka/plugins`, the markdown/mdx content will support **table of contents**, **containers**, **markers**, **aligned paragraphs**, **gfm syntax** (tables, strikethrough, task lists, autolinks etc.), **inserted texts**, **highlighted code fences**, **code titles**, **autolink for headers**, **definition lists** etc. in addition to standard markdown syntax like **bold texts**, **italic texts**, **lists**, **blockquotes**, **headings** etc.
 
-- rehype-autolink-headings
-- rehype-prism-plus
-- rehype-slug
-- rehype-raw
-- rehype-pre-language (custom)
+For other `mdxOptions` see https://github.com/hashicorp/next-mdx-remote#apis.
 
 ## Installation
 
@@ -53,20 +35,18 @@ yarn add @ipikuka/next-mdx-remote
 
 ## Usage
 
-This package is peer dependant with `react`, `react-dom` So, it is assumed that you have already installed them in your `nextjs` project.
+This package is peer dependant with `react`, `react-dom`; so it is assumed that you have already installed.
 
 ```js
-import { MDXRemote } from "next-mdx-remote";
-import serialize from "@ipikuka/next-mdx-remote";
+import { MDXRemote } from "@ipikuka/next-mdx-remote";
+import { serialize } from "@ipikuka/next-mdx-remote/serialize";
 
-import MdxComponents from "../components/mdxcomponents";
+import * as components from "../components/mdxcomponents";
 
-const components = { MdxComponents };
-
-export default function TestPage({ source }) {
+export default function TestPage({ mdxSource }) {
   return (
-    <div className="wrapper">
-      <MDXRemote {...source} components={components} />
+    <div className="mdx-wrapper">
+      <MDXRemote {...mdxSource} components={components} />
     </div>
   );
 }
@@ -76,28 +56,33 @@ export async function getStaticProps() {
   const source = "Some mdx content with a component <Test />";
   const mdxSource = await serialize(source);
 
-  return { props: { source: mdxSource } };
+  return { props: { mdxSource } };
 }
 ```
 
 ## Options
 
-The `@ipikuka/next-mdx-remote` **serialize** function accepts the `OpinionatedSerializeOptions` which is similar `SerializeOptions` of the `next-mdx-remote`, _but a little bit opinionated_.
+The `@ipikuka/next-mdx-remote` **serialize** function accepts the same options with `next-mdx-remote`.
 
 All options are _optional_.
 
 ```typescript
-type OpinionatedSerializeOptions = {
+type SerializeOptions = {
+  /**
+   * Pass-through variables for use in the MDX content
+   */
   scope?: Record<string, unknown>;
-  parseFrontmatter?: boolean;
-  mdxOptions?: {
-    format?: "mdx" | "md" | "detect";
-    jsx?: boolean;
-    mdExtensions?: string[];
-    mdxExtensions?: string[];
+  /**
+   * These options are passed to the MDX compiler.
+   * See [the MDX docs.](https://github.com/mdx-js/mdx/blob/master/packages/mdx/index.js).
+   */
+  mdxOptions?: Omit<CompileOptions, "outputFormat" | "providerImportSource"> & {
     useDynamicImport?: boolean;
-    baseUrl?: string;
   };
+  /**
+   * Indicate whether or not frontmatter should be parsed out of the MDX. Defaults to false
+   */
+  parseFrontmatter?: boolean;
 };
 ```
 
@@ -108,33 +93,13 @@ const source = "Some **bold text** and ==marked text==";
 const mdSource = await serialize(source, { mdxOptions: { format: "md" } });
 ```
 
-Some `mdxOptions` are omitted from the official `mdxOptions` (See https://github.com/hashicorp/next-mdx-remote#apis). This is why the `@ipikuka/next-mdx-remote` is opinionated, providing some pre-selected plugins. The omitted options are:
-
-```typescript
-{
-  recmaPlugins?: PluggableList | undefined;
-  remarkPlugins?: PluggableList | undefined;
-  rehypePlugins?: PluggableList | undefined;
-  remarkRehypeOptions?: Options | undefined;
-  pragma?: string | undefined;
-  pragmaFrag?: string | undefined;
-  pragmaImportSource?: string | undefined;
-  jsxImportSource?: string | undefined;
-  jsxRuntime?: "automatic" | "classic" | undefined;
-  SourceMapGenerator?: typeof SourceMapGenerator | undefined;
-  development?: boolean | undefined;
-}
-```
-
-If you think that an omitted option is needed, you are wellcome to open an issue.
-
 ## Examples:
 
 Need a playground with single page web application. _(PR is wellcome)_
 
 ## Types
 
-This package is fully typed with [TypeScript][typeScript]. The `serialize` function of the `@ipikuka/next-mdx-remote` accepts `OpinionatedSerializeOptions` and returns `Promise<MDXRemoteSerializeResult>` as the official `next-mdx-remote` does.
+This package is fully typed with [TypeScript][typeScript] and exposes the types as the official `next-mdx-remote` does.
 
 ## Compatibility
 
