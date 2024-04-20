@@ -2,10 +2,24 @@
   "name": "@ipikuka/next-mdx-remote",
   "version": "1.0.3",
   "description": "It is an opinionated wrapper for the serialize function of the `next-mdx-remote` package that written by hashicorp",
-  "type": "module",
-  "exports": "./dist/esm/index.js",
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": "./dist/esm/index.js",
+    "./serialize": "./dist/esm/serialize.js",
+    "./rsc": "./dist/esm/rsc.js"
+  },
+  "typesVersions": {
+    "*": {
+      "serialize": [
+        "./dist/esm/serialize.d.ts"
+      ],
+      "rsc": [
+        "./dist/esm/rsc.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint .",
@@ -46,6 +60,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@ipikuka/plugins": "^1.0.1",
     "next-mdx-remote": "^0.0.0-canary-20240314011020"
   },
   "devDependencies": {
@@ -69,7 +84,6 @@
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.5",
-    "unified": "^11.0.4",
     "vfile": "^6.0.1"
   },
   "peerDependencies": {
